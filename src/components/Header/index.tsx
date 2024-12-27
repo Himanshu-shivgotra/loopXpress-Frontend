@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import DropdownNotification from './DropdownNotification';
 import DropdownUser from './DropdownUser';
 import DarkModeSwitcher from './DarkModeSwitcher';
+import axiosInstance from '../../common/axiosInstance';
+// Import axiosInstance
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
@@ -19,17 +21,14 @@ const Header = (props: {
     if (token) {
       const fetchUser = async () => {
         try {
-          const response = await fetch('/api/users/user-info', {
-            method: 'GET',
+          const response = await axiosInstance.get('/api/users/user-info', { // Use axiosInstance
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
 
-          if (response.ok) {
-            const data = await response.json();
-
-            setUser(data);
+          if (response.status === 200) { // Check for successful response
+            setUser(response.data); // Set user data
           } else if (response.status === 401) {
             console.error('Unauthorized, redirecting to login');
             localStorage.removeItem('authToken');
