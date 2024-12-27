@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { AuthHeader } from "./AuthHeader";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import axiosInstance from "../../common/axiosInstance";
 
 const SignIn: React.FC = () => {
     const [email, setEmail] = useState<string>("");
@@ -22,7 +22,7 @@ const SignIn: React.FC = () => {
             setIsSubmitting(true);
             setErrorMessage("");
 
-            const response = await axios.post("https://loop-xpress-backend.vercel.app/api/users/signin", {
+            const response = await axiosInstance.post("/api/users/signin", {
                 email,
                 password,
             });

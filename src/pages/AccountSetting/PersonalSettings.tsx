@@ -5,6 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../common/axiosInstance";
 
 // PasswordUpdate Component
 const PasswordUpdate = () => {
@@ -31,7 +32,7 @@ const PasswordUpdate = () => {
       const token = localStorage.getItem("authToken");
       if (!token) throw new Error("Authorization token not found. Please log in again.");
 
-      const response = await axios.put(
+      const response = await axiosInstance.put(
         "/api/users/update-password",
         { currentPassword, newPassword },
         { headers: { Authorization: `Bearer ${token}` } }
@@ -175,7 +176,7 @@ const PersonalSettings = () => {
         throw new Error("Authorization token not found. Please log in again.");
       }
 
-      const response = await axios.put(
+      const response = await axiosInstance.put(
         "/api/users/update-personal-info",
         { personalDetails: formData },
         { headers: { Authorization: `Bearer ${token}` } }
