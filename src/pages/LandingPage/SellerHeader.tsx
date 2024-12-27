@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import loopLogo from "../../../dist/assets/looplogo.png"
+import loopLogo from "../../../public/logo/looplogo.png"
 
 const SellerNavbar = () => {
     const [menuOpen, setMenuOpen] = useState(false)
