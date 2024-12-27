@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { AuthHeader } from './AuthHeader';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import axiosInstance from '../../common/axiosInstance';
 
 const ResetPassword: React.FC = () => {
   const [password, setPassword] = useState('');
@@ -21,7 +22,7 @@ const ResetPassword: React.FC = () => {
     // Verify token validity
     const verifyToken = async () => {
       try {
-        await axios.get(`https://loop-xpress-backend.vercel.app/api/users/reset-password/${token}`);
+        await axiosInstance.get(`/api/users/reset-password/${token}`);
       } catch (error) {
         setIsValidToken(false);
         setMessage('Invalid or expired reset token');
@@ -49,7 +50,7 @@ const ResetPassword: React.FC = () => {
       setIsSubmitting(true);
       setMessage('');
 
-      await axios.post(`https://loop-xpress-backend.vercel.app/api/users/reset-password/${token}`, {
+      await axiosInstance.post(`/api/users/reset-password/${token}`, {
         newPassword: password,
       });
 

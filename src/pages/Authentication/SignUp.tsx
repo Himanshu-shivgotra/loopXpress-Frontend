@@ -5,6 +5,7 @@ import BankDetails from "./BankDetails";
 import PreviewForm from "./PreviewForm";
 import axios from "axios";
 import { AuthHeader } from "./AuthHeader";
+import axiosInstance from "../../common/axiosInstance";
 
 const MultiStepForm: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -71,8 +72,8 @@ const MultiStepForm: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(
-        "https://loop-xpress-backend.vercel.app/api/users/submit-form",
+      const response = await axiosInstance.post(
+        "/api/users/submit-form",
         formData
       );
       console.log("Form data submitted successfully:", response.data);

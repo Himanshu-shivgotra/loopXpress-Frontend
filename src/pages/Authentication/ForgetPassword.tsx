@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { AuthHeader } from './AuthHeader';
+import axiosInstance from '../../common/axiosInstance';
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -21,7 +21,7 @@ const ForgotPassword: React.FC = () => {
       setIsSubmitting(true);
       setMessage('');
 
-      const response = await axios.post('https://loop-xpress-backend.vercel.app/api/users/forgot-password', {
+      const response = await axiosInstance.post('/api/users/forgot-password', {
         email,
       });
 
