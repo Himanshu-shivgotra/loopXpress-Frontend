@@ -38,7 +38,7 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/products/product/${id}`);
+        const response = await fetch(`https://loop-xpress-backend.vercel.app/api/products/product/${id}`);
         if (!response.ok) {
           throw new Error('Product not found');
         }

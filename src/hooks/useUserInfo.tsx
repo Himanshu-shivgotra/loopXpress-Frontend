@@ -45,7 +45,7 @@ const useUserInfo = () => {
           throw new Error('User not authenticated. Please log in.');
         }
 
-        const response = await fetch('http://localhost:5000/api/users/user-info', {
+        const response = await fetch('https://loop-xpress-backend.vercel.app/api/users/user-info', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -81,7 +81,7 @@ const useUserInfo = () => {
         delete updatedDetails.personalDetails.password;
       }
 
-      const response = await fetch('http://localhost:5000/api/users/update-personal-info', {
+      const response = await fetch('https://loop-xpress-backend.vercel.app/api/users/update-personal-info', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ const useUserInfo = () => {
       const token = localStorage.getItem('authToken');
       if (!token) throw new Error('User not authenticated. Please log in.');
 
-      const response = await fetch('http://localhost:5000/api/users/update-business-info', {
+      const response = await fetch('https://loop-xpress-backend.vercel.app/api/users/update-business-info', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ const useUserInfo = () => {
           throw new Error('User not authenticated. Please log in.');
         }
 
-        const response = await fetch('http://localhost:5000/api/users/user-info', {
+        const response = await fetch('https://loop-xpress-backend.vercel.app/api/users/user-info', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,

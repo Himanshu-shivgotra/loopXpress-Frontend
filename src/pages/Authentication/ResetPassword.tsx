@@ -21,7 +21,7 @@ const ResetPassword: React.FC = () => {
     // Verify token validity
     const verifyToken = async () => {
       try {
-        await axios.get(`http://localhost:5000/api/users/reset-password/${token}`);
+        await axios.get(`https://loop-xpress-backend.vercel.app/api/users/reset-password/${token}`);
       } catch (error) {
         setIsValidToken(false);
         setMessage('Invalid or expired reset token');
@@ -49,7 +49,7 @@ const ResetPassword: React.FC = () => {
       setIsSubmitting(true);
       setMessage('');
 
-      await axios.post(`http://localhost:5000/api/users/reset-password/${token}`, {
+      await axios.post(`https://loop-xpress-backend.vercel.app/api/users/reset-password/${token}`, {
         newPassword: password,
       });
 

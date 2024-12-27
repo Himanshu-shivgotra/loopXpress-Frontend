@@ -21,7 +21,7 @@ const ForgotPassword: React.FC = () => {
       setIsSubmitting(true);
       setMessage('');
 
-      const response = await axios.post('http://localhost:5000/api/users/forgot-password', {
+      const response = await axios.post('https://loop-xpress-backend.vercel.app/api/users/forgot-password', {
         email,
       });
 

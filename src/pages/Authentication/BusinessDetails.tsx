@@ -51,7 +51,7 @@ const BusinessDetails: React.FC<{
 
   const checkGstInDatabase = async (gstNumber: string) => {
     try {
-      const response = await fetch("http://localhost:5000/api/gst/check-exists", {
+      const response = await fetch("https://loop-xpress-backend.vercel.app/api/gst/check-exists", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -79,7 +79,7 @@ const BusinessDetails: React.FC<{
     try {
       console.log('Frontend: Sending GST verification request for:', gstNumber);
 
-      const response = await fetch("http://localhost:5000/api/gst/verify-gst", {
+      const response = await fetch("https://loop-xpress-backend.vercel.app/api/gst/verify-gst", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
