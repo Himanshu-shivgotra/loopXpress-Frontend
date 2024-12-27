@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import loopLogo from "../../../dist/assets/looplogo.png"
+import loopLogo from "../../../public/logo/looplogo.png"
 import { FaHome } from "react-icons/fa"; // Importing an icon from react-icons
 
 export const AuthHeader = () => {

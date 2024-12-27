@@ -1,5 +1,5 @@
 import React from 'react';
-import loopLogo from "../../../dist/assets/looplogo.png"
+import loopLogo from "../../../public/logo/looplogo.png"
 import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 
 const Footer = () => {

@@ -5,7 +5,7 @@ import DropdownNotification from './DropdownNotification';
 import DropdownUser from './DropdownUser';
 import DarkModeSwitcher from './DarkModeSwitcher';
 import axiosInstance from '../../common/axiosInstance';
-import loopLogo from "../../../dist/assets/looplogo.png"
+import loopLogo from "../../../public/logo/looplogo.png"
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
