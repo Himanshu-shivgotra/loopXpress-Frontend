@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
+import loopLogo from "../../../dist/assets/looplogo.png"
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -63,7 +64,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6">
         <NavLink to="/">
-          <img src={"/src/images/logo/looplogo.png"} className='h-24' alt="Logo" />
+          <img src={loopLogo} className='h-24' alt="Logo" />
         </NavLink>
 
         <button

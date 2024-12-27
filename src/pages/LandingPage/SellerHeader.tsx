@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
+import loopLogo from "../../../dist/assets/looplogo.png"
 
 const SellerNavbar = () => {
     const [menuOpen, setMenuOpen] = useState(false)
@@ -24,24 +25,7 @@ const SellerNavbar = () => {
             window.removeEventListener("scroll", handleScroll)
         }
     }, [])
-    // const navLinks = [
-    //     {
-    //         name: "Dashboard",
-    //         path: "/"
-    //     },
-    //     {
-    //         name: "Products",
-    //         path: "/"
-    //     },
-    //     {
-    //         name: "Orders",
-    //         path: "/"
-    //     },
-    //     {
-    //         name: "Account",
-    //         path: "/"
-    //     }
-    // ]
+
     return (
         <div
             className={`fixed top-0 left-0 w-full z-50 text-white transition-all duration-500 ease-in-out ${isScrolled ? "bg-[#141414] shadow-md" : "bg-transparent"
@@ -53,7 +37,7 @@ const SellerNavbar = () => {
                     <div className="flex items-center space-x-2">
                         <Link to="/">
                             <img
-                                src={"/src/images/logo/looplogo.png"} alt="Logo"
+                                src={loopLogo} alt="Logo"
                                 className="h-20"
                             />
                         </Link>

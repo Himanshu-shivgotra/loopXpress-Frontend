@@ -5,7 +5,7 @@ import DropdownNotification from './DropdownNotification';
 import DropdownUser from './DropdownUser';
 import DarkModeSwitcher from './DarkModeSwitcher';
 import axiosInstance from '../../common/axiosInstance';
-// Import axiosInstance
+import loopLogo from "../../../dist/assets/looplogo.png"
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
@@ -71,7 +71,7 @@ const Header = (props: {
           </button>
 
           <Link className="block flex-shrink-0 lg:hidden " to="/">
-            <img className='h-12' src={"/src/images/logo/looplogo.png"} alt="Logo" />
+            <img className='h-12' src={loopLogo} alt="Logo" />
           </Link>
         </div>
 
