@@ -19,7 +19,7 @@ const Header = (props: {
     if (token) {
       const fetchUser = async () => {
         try {
-          const response = await fetch('https://loop-xpress-backend.vercel.app/api/users/user-info', {
+          const response = await fetch('/api/users/user-info', {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${token}`,
