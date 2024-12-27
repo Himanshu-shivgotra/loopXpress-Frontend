@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { Route, Routes, useLocation, Navigate } from 'react-router-dom';
+import { Route, Routes, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Loader from './common/Loader';
 import SignIn from './pages/Authentication/SignIn';
@@ -26,6 +26,7 @@ function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -87,7 +88,7 @@ function App() {
         <Route path="/payouts" element={<Payouts/>} />
         <Route path="/add-new-product" element={<AddNewProduct onProductAdded={() => {
           // Optionally navigate to product list after adding
-          window.location.href = '/product-list';
+          navigate('/product-list');
         }} />} />
         <Route path="/product-list" element={<ProductList />} />
         <Route path="/view-orders" element={<ViewOrders />} />

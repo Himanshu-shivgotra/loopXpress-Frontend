@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthHeader } from "./AuthHeader";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axiosInstance from "../../common/axiosInstance";
 
 const SignIn: React.FC = () => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
@@ -42,7 +43,7 @@ const SignIn: React.FC = () => {
                 }
             }
 
-            window.location.href = "/dashboard";
+            navigate("/dashboard");
         } catch (error: any) {
             console.error("Error logging in:", error);
             if (error.response?.data?.message) {
