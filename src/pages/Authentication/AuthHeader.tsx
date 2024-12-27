@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import loopLogo from "../../../dist/assets/looplogo.png"
 import { FaHome } from "react-icons/fa"; // Importing an icon from react-icons
 
 export const AuthHeader = () => {
@@ -14,7 +15,7 @@ export const AuthHeader = () => {
                         <div className="flex items-center space-x-2">
                             <Link to="/">
                                 <img
-                                    src={"/src/images/logo/looplogo.png"}
+                                    src={loopLogo}
                                     alt="Logo"
                                     className="h-20"
                                 />
