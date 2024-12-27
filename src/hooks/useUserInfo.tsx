@@ -45,7 +45,7 @@ const useUserInfo = () => {
           throw new Error('User not authenticated. Please log in.');
         }
 
-        const response = await fetch('https://loop-xpress-backend.vercel.app/api/users/user-info', {
+        const response = await fetch('https://loop-xpress-backend.vercel.app', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
