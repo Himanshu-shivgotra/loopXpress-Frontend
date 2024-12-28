@@ -43,7 +43,7 @@ function App() {
   }, [token]);
 
   if (loading) {
-    return <Loader />; // Show a loader while authentication status is being checked
+    return <Loader />;
   }
 
   return (
