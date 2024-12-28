@@ -34,8 +34,12 @@ function App() {
 
   const token = localStorage.getItem('authToken');
   useEffect(() => {
-    setIsAuthenticated(!!token); // Set authentication status based on the token
-    setLoading(false); // Stop loading after checking
+    setIsAuthenticated(!!token);
+    if (token === "undefined") {
+      localStorage.removeItem('authToken');
+      navigate('/auth/signin')
+    }
+    setLoading(false);
   }, [token]);
 
   if (loading) {
@@ -44,70 +48,70 @@ function App() {
 
   return (
     <>
-    <Toaster position='top-center'/>
-    <Routes>
-      {/* Public Routes */}
-      <Route
-        path="/auth/signin"
-        element={!isAuthenticated ? <SignIn /> : <Navigate to="/dashboard" replace />}
-      />
-      <Route
-        path="/auth/signup"
-        element={!isAuthenticated ? <SignUp /> : <Navigate to="/dashboard" replace />}
-      />
-      <Route
-        path="/auth/forgot-password"
-        element={!isAuthenticated ? <ForgotPassword /> : <Navigate to="/dashboard" replace />}
-      />
-       <Route
-        path="/auth/reset-password/:token"
-        element={!isAuthenticated ? <ResetPassword /> : <Navigate to="/dashboard" replace />}
-      />
-      <Route
-        path="/"
-        element={!isAuthenticated ? <LandingPage /> : <Navigate to="/dashboard" replace />}
-      />
-      
-      {/* Redirect root to dashboard or signin based on authentication */}
-      <Route
-        path="/"
-        element={<Navigate to={isAuthenticated ? "/dashboard" : "/auth/signin"} replace />}
-      />
+      <Toaster position='top-center' />
+      <Routes>
+        {/* Public Routes */}
+        <Route
+          path="/auth/signin"
+          element={!isAuthenticated ? <SignIn /> : <Navigate to="/dashboard" replace />}
+        />
+        <Route
+          path="/auth/signup"
+          element={!isAuthenticated ? <SignUp /> : <Navigate to="/auth/signin" replace />}
+        />
+        <Route
+          path="/auth/forgot-password"
+          element={!isAuthenticated ? <ForgotPassword /> : <Navigate to="/dashboard" replace />}
+        />
+        <Route
+          path="/auth/reset-password/:token"
+          element={!isAuthenticated ? <ResetPassword /> : <Navigate to="/dashboard" replace />}
+        />
+        <Route
+          path="/"
+          element={!isAuthenticated ? <LandingPage /> : <Navigate to="/dashboard" replace />}
+        />
 
-      {/* Protected Routes */}
-      <Route
-        element={
-          <ProtectedRoute isAuthenticated={isAuthenticated}>
-            <DefaultLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="/dashboard" element={<ECommerce />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/payouts" element={<Payouts/>} />
-        <Route path="/add-new-product" element={<AddNewProduct onProductAdded={() => {
-          // Optionally navigate to product list after adding
-          navigate('/product-list');
-        }} />} />
-        <Route path="/product-list" element={<ProductList />} />
-        <Route path="/view-orders" element={<ViewOrders />} />
-        <Route path="/order-status" element={<OrderStatus />} />
-        <Route path="/return-or-refund" element={<ReturnAndRefund />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/seller/edit-product/:id" element={<EditProduct />} />
-        <Route path="/seller/product-list" element={<ProductList />} />
-        <Route path="/seller/product/:id" element={<ProductDetails />} />
-      </Route>
+        {/* Redirect root to dashboard or signin based on authentication */}
+        <Route
+          path="/"
+          element={<Navigate to={isAuthenticated ? "/dashboard" : "/auth/signin"} replace />}
+        />
 
-     
-      <Route
-        path="*"
-        element={<Navigate to={isAuthenticated ? "/dashboard" : "/auth/signin"} replace />}
-      />
-  
-    </Routes>
-  </>
+        {/* Protected Routes */}
+        <Route
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <DefaultLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="/dashboard" element={<ECommerce />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/payouts" element={<Payouts />} />
+          <Route path="/add-new-product" element={<AddNewProduct onProductAdded={() => {
+            // Optionally navigate to product list after adding
+            navigate('/product-list');
+          }} />} />
+          <Route path="/product-list" element={<ProductList />} />
+          <Route path="/view-orders" element={<ViewOrders />} />
+          <Route path="/order-status" element={<OrderStatus />} />
+          <Route path="/return-or-refund" element={<ReturnAndRefund />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/seller/edit-product/:id" element={<EditProduct />} />
+          <Route path="/seller/product-list" element={<ProductList />} />
+          <Route path="/seller/product/:id" element={<ProductDetails />} />
+        </Route>
+
+
+        <Route
+          path="*"
+          element={<Navigate to={isAuthenticated ? "/dashboard" : "/auth/signin"} replace />}
+        />
+
+      </Routes>
+    </>
   );
 }
 
