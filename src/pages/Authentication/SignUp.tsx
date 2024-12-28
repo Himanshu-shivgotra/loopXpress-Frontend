@@ -6,6 +6,7 @@ import PreviewForm from "./PreviewForm";
 import { AuthHeader } from "./AuthHeader";
 import axiosInstance from "../../common/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import toast, { Toast } from "react-hot-toast";
 
 const MultiStepForm: React.FC = () => {
   const navigate = useNavigate();
@@ -77,12 +78,19 @@ const MultiStepForm: React.FC = () => {
         "/api/users/submit-form",
         formData
       );
-      console.log("Form data submitted successfully:", response.data);
+      toast.success("Form submitted successfully! Please login again.", {
+        duration: 2000,
+      })
+
       localStorage.setItem("authToken", response.data.token);
-      setErrorMessage(""); // Clear error message if submission is successful
-      navigate( "/dashboard"); // Navigate to the home page after successful submission
+      setErrorMessage("");
+      setTimeout(() => {
+        navigate("/auth/signin");
+      }, 2000);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      toast.error("Error submitting form. Please try again later.", {
+        duration: 2000,
+      });
       setErrorMessage("Error submitting form. Please try again later.");
     }
   };
@@ -107,9 +115,9 @@ const MultiStepForm: React.FC = () => {
               onClick={() => setCurrentStep(step.id)} // Optional: Click to navigate
               className={`cursor-pointer text-center py-3 px-6 rounded transition-all duration-300 
               ${currentStep === step.id
-                ? "bg-orange-700 font-semibold border-2 border-white text-white"
-                : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-              }
+                  ? "bg-orange-700 font-semibold border-2 border-white text-white"
+                  : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                }
               w-full
             `}
             >
