@@ -6,7 +6,7 @@ import PreviewForm from "./PreviewForm";
 import { AuthHeader } from "./AuthHeader";
 import axiosInstance from "../../common/axiosInstance";
 import { useNavigate } from "react-router-dom";
-import toast, { Toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const MultiStepForm: React.FC = () => {
   const navigate = useNavigate();
@@ -112,7 +112,7 @@ const MultiStepForm: React.FC = () => {
           {steps.map((step) => (
             <div
               key={step.id}
-              onClick={() => setCurrentStep(step.id)} // Optional: Click to navigate
+              onClick={() => setCurrentStep(step.id)}
               className={`cursor-pointer text-center py-3 px-6 rounded transition-all duration-300 
               ${currentStep === step.id
                   ? "bg-orange-700 font-semibold border-2 border-white text-white"

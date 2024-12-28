@@ -35,7 +35,6 @@ const SignIn: React.FC = () => {
 
             localStorage.setItem("authToken", token);
 
-            console.log('Checking localStorage after login:');
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 if (key) {

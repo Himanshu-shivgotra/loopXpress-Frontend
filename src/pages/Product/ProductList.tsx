@@ -135,7 +135,7 @@ const ProductList = () => {
       <div className="text-center p-6">
         <p className="text-gray-600 text-lg">No products found.</p>
         <Link
-          to="/seller/add-product"
+          to="/add-new-product"
           className="mt-4 inline-block px-6 py-3 text-white bg-orange-500 rounded-lg shadow-lg hover:bg-orange-600 transition"
         >
           Add Your First Product
@@ -164,7 +164,7 @@ const ProductList = () => {
           >
             Add New Product
           </Link>
-        </div>  
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
