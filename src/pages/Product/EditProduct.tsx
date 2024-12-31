@@ -265,8 +265,8 @@ const EditProduct: React.FC = () => {
                   <label className="block mb-2 text-light-theme-text font-medium">Quantity</label>
                   <input
                     type="number"
-                    name="stock"
-                    value={product.stock}
+                    name="quantity"
+                    value={product.quantity}
                     onChange={handleInputChange}
                     className="w-full rounded-lg border border-gray-300 bg-white text-black dark:border-[#dc651d] dark:bg-[#24303f] dark:text-white py-3 px-4 focus:ring-2 focus:ring-[#dc651d]"
                     required
