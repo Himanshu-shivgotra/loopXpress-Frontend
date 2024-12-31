@@ -11,7 +11,7 @@ interface Product {
   originalPrice: number;
   discountedPrice: number;
   category: string;
-  quantity: number;
+  stock: number;
   size: string;
   description: string;
   sku: string;
@@ -139,11 +139,10 @@ const ProductDetails = () => {
                   <div
                     key={index}
                     onClick={() => selectImage(index)}
-                    className={`cursor-pointer rounded-lg overflow-hidden transform transition-all duration-300 hover:scale-105 ${
-                      currentImageIndex === index
+                    className={`cursor-pointer rounded-lg overflow-hidden transform transition-all duration-300 hover:scale-105 ${currentImageIndex === index
                         ? 'border-2 border-[#dc651d] shadow-lg scale-105'
                         : 'border-2 border-transparent hover:border-gray-300 dark:hover:border-boxdark-2'
-                    }`}
+                      }`}
                   >
                     <img
                       src={img}
@@ -156,24 +155,24 @@ const ProductDetails = () => {
             )}
           </div>
 
-            {/* Enhanced Product Information */}
-            <div className="md:w-1/2 p-8">
-              {/* Basic Info Section */}
-              <div className="mb-6">
-                <div className="flex justify-between items-start">
-                  <div className="flex flex-col">
-                    <div >
-                      <p className="text-orange-500 dark:text-orange-500 text">{product.brand}</p>
-                    </div>
-                    <h1 className="text-2xl font-bold dark:text-white mt-2 w-full ">{product.title}</h1>
+          {/* Enhanced Product Information */}
+          <div className="md:w-1/2 p-8">
+            {/* Basic Info Section */}
+            <div className="mb-6">
+              <div className="flex justify-between items-start">
+                <div className="flex flex-col">
+                  <div >
+                    <p className="text-orange-500 dark:text-orange-500 text">{product.brand}</p>
                   </div>
-                </div>
-                
-                {/* Category */}
-                <div className="flex gap-4 mt-2 text text-gray-600 dark:text-gray-400">
-                  <p>Category: {product.category}</p>
+                  <h1 className="text-2xl font-bold dark:text-white mt-2 w-full ">{product.title}</h1>
                 </div>
               </div>
+
+              {/* Category */}
+              <div className="flex gap-4 mt-2 text text-gray-600 dark:text-gray-400">
+                <p>Category: {product.category}</p>
+              </div>
+            </div>
 
             <div className="mb-6 bg-gray-50 dark:bg-boxdark-2 p-4 rounded-lg">
               <div className="flex items-center mb-2">
@@ -193,7 +192,7 @@ const ProductDetails = () => {
             <div className="mb-6 overflow-hidden">
               <h2 className="text-lg font-semibold mb-3 dark:text-white">Product Highlights</h2>
               <ul className="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-400 break-words">
-                {Array.isArray(product.highlights) ? 
+                {Array.isArray(product.highlights) ?
                   product.highlights.map((highlight, index) => (
                     <li key={index} className="px-2">{String(highlight)}</li>
                   ))
@@ -208,9 +207,9 @@ const ProductDetails = () => {
             </div>
 
             <div className="mb-6 grid grid-cols-3 gap-4">
-            <div className="bg-green-200 dark:bg-green-900/30 p-3 rounded-lg text-center">
+              <div className="bg-green-200 dark:bg-green-900/30 p-3 rounded-lg text-center">
                 <p className="text-sm text-green-600 dark:text-green-400">In Stock</p>
-                <p className="font-bold text-green-700 dark:text-green-300">{product.quantity}</p>
+                <p className="font-bold text-green-700 dark:text-green-300">{product.stock}</p>
               </div>
               <div className="bg-blue-50 bg-blue-900/30 p-3 rounded-lg text-center">
                 <p className="text-sm text-blue-600 ">Stock Alert</p>

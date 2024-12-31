@@ -43,21 +43,6 @@ const SellerNavbar = () => {
                         </Link>
                     </div>
 
-                    {/* Desktop Links
-                    <div className="hidden md:flex space-x-6">
-                        {navLinks.map(link => (
-                            <Link
-                                key={link.name}
-                                to={link.path}
-                                className="group relative text-white hover:text-orange-400"
-                            >
-                                {link.name}
-                                
-                                <span className="absolute left-0 bottom-0 w-full h-0.5 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"></span>
-                            </Link>
-                        ))}
-                    </div> */}
-
                     {/* Mobile Menu Button */}
                     <div className="md:hidden">
                         <button
@@ -107,18 +92,7 @@ const SellerNavbar = () => {
                     }}
                 >
                     <div className="text-white py-4 px-6 text-center">
-                        {/* {navLinks.map(link => (
-                            <Link
-                                key={link.name}
-                                to={link.path}
-                                className="block py-2 text-white group hover:text-orange-500 relative"
-                                onClick={() => setMenuOpen(false)} // Close menu on click
-                            >
-                                {link.name}
-                                
-                                <span className="absolute left-1/2 bottom-0 w-1/4 h-0.5 bg-white scale-x-0 group-hover:scale-x-100 transform -translate-x-1/2 transition-transform duration-300 ease-in-out"></span>
-                            </Link>
-                        ))} */}
+
                         <div className="flex flex-col items-center space-y-4 mt-4">
                             <Link to="/auth/signin">
                                 <button

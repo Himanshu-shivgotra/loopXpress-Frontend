@@ -24,7 +24,7 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
     discountedPrice: '',
     category: '',
     subcategory: '',
-    quantity: '',
+    stock: '',
     size: '',
     description: '',
     material: '',
@@ -395,8 +395,8 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
                   <label className="mb-2.5 block text-black dark:text-white">Quantity</label>
                   <input
                     type="number"
-                    name="quantity"
-                    value={productData.quantity}
+                    name="stock"
+                    value={productData.stock}
                     onChange={handleChange}
                     className="w-full rounded border-[1.5px] border-gray-300 bg-white text-black dark:border-[#dc651d] dark:bg-[#24303f] dark:text-white py-3 px-5 outline-none transition focus:border-[#dc651d]"
                     required

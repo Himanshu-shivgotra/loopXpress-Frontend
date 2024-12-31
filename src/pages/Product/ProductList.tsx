@@ -9,7 +9,7 @@ interface Product {
   originalPrice: number;
   discountedPrice: number;
   category: string;
-  quantity: number;
+  stock: number;
   imageUrls: string[];
 }
 
@@ -188,7 +188,7 @@ const ProductList = () => {
             </div>
             <div className="flex justify-between items-center text-sm text-black-400 mb-4">
               <span>{product.category}</span>
-              <span>Stock: {product.quantity}</span>
+              <span>Stock: {product.stock}</span>
             </div>
 
             <div className="mt-auto flex gap-2">
