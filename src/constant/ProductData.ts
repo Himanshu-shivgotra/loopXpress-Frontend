@@ -7,7 +7,7 @@ export interface ProductData {
     discountedPrice: string;
     category: string;
     subcategory: string;
-    stock: string;
+    quantity: string;
     size: string;
     description: string;
     material: string;

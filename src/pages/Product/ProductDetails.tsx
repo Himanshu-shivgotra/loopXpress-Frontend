@@ -11,7 +11,7 @@ interface Product {
   originalPrice: number;
   discountedPrice: number;
   category: string;
-  stock: number;
+  quantity: number;
   size: string;
   description: string;
   sku: string;
@@ -209,7 +209,7 @@ const ProductDetails = () => {
             <div className="mb-6 grid grid-cols-3 gap-4">
               <div className="bg-green-200 dark:bg-green-900/30 p-3 rounded-lg text-center">
                 <p className="text-sm text-green-600 dark:text-green-400">In Stock</p>
-                <p className="font-bold text-green-700 dark:text-green-300">{product.stock}</p>
+                <p className="font-bold text-green-700 dark:text-green-300">{product.quantity}</p>
               </div>
               <div className="bg-blue-50 bg-blue-900/30 p-3 rounded-lg text-center">
                 <p className="text-sm text-blue-600 ">Stock Alert</p>
