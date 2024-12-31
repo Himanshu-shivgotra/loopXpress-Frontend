@@ -35,7 +35,7 @@ const EditProduct: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    
+
     if (name === 'highlights') {
       setProduct({ ...product, [name]: value.split(',').map((item) => item.trim()) });
     } else if (name.startsWith('imageUrl')) {
@@ -55,7 +55,7 @@ const EditProduct: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate prices before submitting
     if (Number(product.discountedPrice) > Number(product.originalPrice)) {
       toast.error('Discounted price cannot be greater than original price');
@@ -65,9 +65,9 @@ const EditProduct: React.FC = () => {
     setSaving(true);
     try {
       const authToken = localStorage.getItem('authToken');
-      
+
       const formData = new FormData();
-      
+
       uploadedFiles.forEach((file) => {
         formData.append('images', file);
       });
@@ -81,10 +81,10 @@ const EditProduct: React.FC = () => {
 
       Object.keys(productDataToSend).forEach(key => {
         if (productDataToSend[key] !== null && productDataToSend[key] !== undefined) {
-          formData.append(key, 
-            typeof productDataToSend[key] === 'object' ? 
-            JSON.stringify(productDataToSend[key]) : 
-            productDataToSend[key]
+          formData.append(key,
+            typeof productDataToSend[key] === 'object' ?
+              JSON.stringify(productDataToSend[key]) :
+              productDataToSend[key]
           );
         }
       });
@@ -104,7 +104,7 @@ const EditProduct: React.FC = () => {
 
       const data = await response.json();
       toast.success('Product updated successfully!');
-  
+
       setTimeout(() => {
         navigate(`/seller/product/${id}`);
       }, 1000);
@@ -265,8 +265,8 @@ const EditProduct: React.FC = () => {
                   <label className="block mb-2 text-light-theme-text font-medium">Quantity</label>
                   <input
                     type="number"
-                    name="quantity"
-                    value={product.quantity}
+                    name="stock"
+                    value={product.stock}
                     onChange={handleInputChange}
                     className="w-full rounded-lg border border-gray-300 bg-white text-black dark:border-[#dc651d] dark:bg-[#24303f] dark:text-white py-3 px-4 focus:ring-2 focus:ring-[#dc651d]"
                     required
