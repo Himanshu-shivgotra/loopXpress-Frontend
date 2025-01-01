@@ -22,6 +22,7 @@ const MultiStepForm: React.FC = () => {
     businessDetails: {
       businessName: "",
       businessType: "",
+      brandName: "",
       businessPhone: "",
       businessEmail: "",
       gstNumber: "",
@@ -55,6 +56,7 @@ const MultiStepForm: React.FC = () => {
       !personalDetails.address ||
       !businessDetails.businessName ||
       !businessDetails.businessType ||
+      !businessDetails.brandName ||
       !businessDetails.businessPhone ||
       !businessDetails.businessEmail ||
       !businessDetails.gstNumber ||
