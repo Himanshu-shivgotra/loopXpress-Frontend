@@ -8,7 +8,7 @@ import { ProductData, subcategorySizeMap, categories, sizeOptionsMap } from '../
 import axiosInstance from '../../common/axiosInstance';
 import { FaTimes, FaPlus } from 'react-icons/fa';
 
-type SizeType = 'clothing' | 'shoes' | 'equipment' | 'none';
+
 
 interface AddNewProductProps {
   onProductAdded: () => void;
@@ -40,7 +40,6 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
     colors: [],
   });
 
-  const [highlightInput, setHighlightInput] = useState<string>('');
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [colorInputs, setColorInputs] = useState<string[]>(['']); // Initialize with one empty color input
@@ -129,15 +128,17 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
     const authToken = localStorage.getItem("authToken");
 
     try {
-      const response = await axiosInstance.post('/api/products/add-product', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${authToken}`,
-        },
-        body: formData,
-      });
+      const response = await axiosInstance.post('/api/products/add-product',
+        formData,
+        {
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'multipart/form-data'
+          },
+        }
+      );
 
-      const data = await response.data
+      const data = response.data;
       console.log('Server response:', data);
 
       if (response.status === 200) {
@@ -169,32 +170,6 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
       toast.error(error instanceof Error ? error.message : 'Failed to add product');
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  const handleImageUrlChange = (index: number, value: string) => {
-    const newImageUrls = [...productData.imageUrls];
-    newImageUrls[index] = value;
-    setProductData({
-      ...productData,
-      imageUrls: newImageUrls
-    });
-  };
-
-  const addImageUrl = () => {
-    setProductData({
-      ...productData,
-      imageUrls: [...productData.imageUrls, '']
-    });
-  };
-
-  const removeImageUrl = (index: number) => {
-    if (productData.imageUrls.length > 1) {
-      const newImageUrls = productData.imageUrls.filter((_, i) => i !== index);
-      setProductData({
-        ...productData,
-        imageUrls: newImageUrls
-      });
     }
   };
 

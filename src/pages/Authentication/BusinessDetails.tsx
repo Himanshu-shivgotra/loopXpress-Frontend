@@ -64,16 +64,14 @@ const BusinessDetails: React.FC<{
   const checkGstInDatabase = async (gstNumber: string) => {
     try {
       const response = await axiosInstance.post("/api/gst/check-exists", {
-        method: "POST",
+        gstin: gstNumber,
+      }, {
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          gstin: gstNumber,
-        }),
       });
 
-      const result = await response.data;
+      const result = response.data;
       return result.exists;
 
     } catch (error) {
@@ -86,32 +84,31 @@ const BusinessDetails: React.FC<{
     }
   };
 
+
   const verifyGstNumber = async (gstNumber: string) => {
     setIsVerifying(true);
     try {
       console.log('Frontend: Sending GST verification request for:', gstNumber);
 
       const response = await axiosInstance.post("/api/gst/verify-gst", {
-        method: "POST",
+        gstin: gstNumber,
+      }, {
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          gstin: gstNumber,
-        }),
       });
 
       const contentType = response.headers["content-type"];
       let result;
       if (contentType && contentType.includes("application/json")) {
-        result = await response.data;
+        result = response.data;
       } else {
         throw new Error("Received non-JSON response");
       }
 
       console.log("Frontend: Received API Response:", result);
 
-      if (response.status === 200) {
+      if (!result.success || !result.data) {
         setFormErrors({
           ...formErrors,
           gstNumber: result.message || "GST verification failed."
@@ -120,9 +117,8 @@ const BusinessDetails: React.FC<{
         return false;
       }
 
-      if (result.success && result.data) {
-        console.log("Frontend: Setting GST Details:", result.data);
-        setGstDetails(result.data);
+      console.log("Frontend: Setting GST Details:", result.data);
+      setGstDetails(result.data);
 
         onChange({
           ...data,
@@ -133,16 +129,9 @@ const BusinessDetails: React.FC<{
           gstDetails: result.data
         });
 
-        setFormErrors({ ...formErrors, gstNumber: "" });
-        return true;
-      } else {
-        setGstDetails(null);
-        setFormErrors({
-          ...formErrors,
-          gstNumber: "Invalid GST details received"
-        });
-        return false;
-      }
+      setFormErrors({ ...formErrors, gstNumber: "" });
+      return true;
+
     } catch (error) {
       console.error("Frontend: GST Verification Error:", error);
       setFormErrors({
@@ -155,6 +144,7 @@ const BusinessDetails: React.FC<{
       setIsVerifying(false);
     }
   };
+
 
   const validateForm = () => {
     const errors: any = {};
