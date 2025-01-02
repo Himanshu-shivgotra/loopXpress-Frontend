@@ -7,6 +7,7 @@ interface PreviewFormProps {
             businessName: string;
             gstNumber: string;
             address?: string;
+            brandName?: string;
             gstDetails?: {
                 address?: string;
                 legalName?: string;
@@ -55,6 +56,10 @@ const PreviewForm: React.FC<PreviewFormProps> = ({ data, onPrevious, onSubmit })
                         <div className="flex flex-col text-sm sm:text-base">
                             <span className="font-medium text-gray-600">Business Name:</span>
                             <span>{businessDetails.businessName}</span>
+                        </div>
+                        <div className="flex flex-col text-sm sm:text-base">
+                            <span className="font-medium text-gray-600">Brand Name:</span>
+                            <span>{businessDetails.brandName}</span>
                         </div>
                         <div className="flex flex-col text-sm sm:text-base">
                             <span className="font-medium text-gray-600">GST Number:</span>

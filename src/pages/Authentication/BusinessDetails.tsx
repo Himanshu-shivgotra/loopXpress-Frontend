@@ -10,6 +10,7 @@ const BusinessDetails: React.FC<{
   const [formErrors, setFormErrors] = useState<any>({});
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
   const [gstDetails, setGstDetails] = useState<any>(data.gstDetails || null);
+  const [showOtherBusinessType, setShowOtherBusinessType] = useState<boolean>(data.businessType === 'Other');
 
   const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
 
@@ -18,7 +19,16 @@ const BusinessDetails: React.FC<{
   ) => {
     const { name, value } = e.target;
 
-    onChange({ ...data, [name]: value });
+    const updatedData = { ...data, [name]: value };
+    onChange(updatedData);
+
+    if (name === 'businessType') {
+      setShowOtherBusinessType(value === 'Other');
+      if (value !== 'Other') {
+        updatedData.otherBusinessType = '';
+        onChange(updatedData);
+      }
+    }
 
     if (name === 'gstNumber') {
       if (gstRegex.test(value)) {
@@ -42,6 +52,7 @@ const BusinessDetails: React.FC<{
           [name]: originalGstNumber,
           businessName: data.businessName,
           businessType: data.businessType,
+          brandName: data.brandName,
           address: data.address
         });
       } else {
@@ -117,6 +128,7 @@ const BusinessDetails: React.FC<{
           ...data,
           businessName: result.data.legalName,
           businessType: result.data.businessType,
+          brandName: data.brandName,
           address: result.data.address,
           gstDetails: result.data
         });
@@ -155,6 +167,16 @@ const BusinessDetails: React.FC<{
 
     if (!data.businessType || data.businessType === "") {
       errors.businessType = "Please select a valid business type.";
+      isValid = false;
+    }
+
+    if (data.businessType === 'Other' && (!data.otherBusinessType || data.otherBusinessType.trim() === "")) {
+      errors.otherBusinessType = "Please specify your business type.";
+      isValid = false;
+    }
+
+    if (!data.brandName || data.brandName.trim() === "") {
+      errors.brandName = "Brand Name is required.";
       isValid = false;
     }
 
@@ -251,6 +273,50 @@ const BusinessDetails: React.FC<{
                     {formErrors.businessType && (
                       <p className="text-red-500 text-sm mt-1">
                         {formErrors.businessType}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {showOtherBusinessType && (
+                  <div className="col-span-1">
+                    <label className="mb-2.5 block font-medium text-black dark:text-white">
+                      Specify Business Type
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="otherBusinessType"
+                        value={data.otherBusinessType || ""}
+                        onChange={handleInputChange}
+                        placeholder="Enter your Business Type"
+                        className="w-full rounded-lg border bg-transparent py-2 px-4"
+                      />
+                      {formErrors.otherBusinessType && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {formErrors.otherBusinessType}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                <div className="col-span-1">
+                  <label className="mb-2.5 block font-medium text-black dark:text-white">
+                    Brand Name
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="brandName"
+                      value={data.brandName || ""}
+                      onChange={handleInputChange}
+                      placeholder="Enter your Brand name"
+                      className="w-full rounded-lg border bg-transparent py-2 px-4"
+                    />
+                    {formErrors.brandName && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {formErrors.brandName}
                       </p>
                     )}
                   </div>
