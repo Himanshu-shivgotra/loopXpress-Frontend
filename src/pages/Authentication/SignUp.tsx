@@ -74,26 +74,28 @@ const MultiStepForm: React.FC = () => {
     }
 
     try {
-      const response = await axiosInstance.post(
-        "/api/users/submit-form",
-        formData
-      );
+      setErrorMessage(""); // Clear any previous error message
+
+      const response = await axiosInstance.post("/api/users/submit-form", formData);
+
       toast.success("Form submitted successfully! Please login again.", {
         duration: 2000,
-      })
+      });
 
       localStorage.setItem("authToken", response.data.token);
-      setErrorMessage("");
+
       setTimeout(() => {
         navigate("/auth/signin");
       }, 2000);
     } catch (error) {
+      console.error("Error submitting form:", error); // Log error for debugging
       toast.error("Error submitting form. Please try again later.", {
         duration: 2000,
       });
       setErrorMessage("Error submitting form. Please try again later.");
     }
   };
+
 
   const steps = [
     { id: 1, name: "Personal Details", component: PersonalDetails },

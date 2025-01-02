@@ -69,20 +69,25 @@ const EditProduct: React.FC = () => {
 
       const formData = new FormData();
 
+      // Append uploaded files
       uploadedFiles.forEach((file) => {
         formData.append('images', file);
       });
 
+      // Append existing image URLs
       const existingImages = product.imageUrls.filter(url => !url.startsWith('blob:'));
       formData.append('existingImageUrls', JSON.stringify(existingImages));
 
+      // Prepare product data to send
       const productDataToSend = { ...product };
       delete productDataToSend.imageUrls;
       delete productDataToSend.base64Images;
 
+      // Append product data fields
       Object.keys(productDataToSend).forEach(key => {
         if (productDataToSend[key] !== null && productDataToSend[key] !== undefined) {
-          formData.append(key,
+          formData.append(
+            key,
             typeof productDataToSend[key] === 'object' ?
               JSON.stringify(productDataToSend[key]) :
               productDataToSend[key]
@@ -90,27 +95,33 @@ const EditProduct: React.FC = () => {
         }
       });
 
-      const response = await axiosInstance.put(`/api/products/update-product/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${authToken}`
-        },
-        body: formData,
-      });
+      // Make PUT request with form data
+      const response = await axiosInstance.put(
+        `/api/products/update-product/${id}`,
+        formData,
+        {
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'multipart/form-data'
+          },
+        }
+      );
 
-      const data = await response.data;
+      const data = response.data;
       toast.success('Product updated successfully!');
 
+      // Navigate to the product page after a delay
       setTimeout(() => {
         navigate(`/seller/product/${id}`);
       }, 1000);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating product:', error);
       toast.error(error instanceof Error ? error.message : 'Failed to update product');
     } finally {
       setSaving(false);
     }
   };
+
 
   const handleCancel = () => {
     navigate(`/product/${id}`);
