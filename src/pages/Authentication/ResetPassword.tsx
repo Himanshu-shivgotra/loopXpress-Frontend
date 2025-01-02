@@ -36,6 +36,7 @@ const ResetPassword: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Check if passwords match
     if (password !== confirmPassword) {
       setMessage('Passwords do not match');
       return;
@@ -70,6 +71,7 @@ const ResetPassword: React.FC = () => {
       setIsSubmitting(false);
     }
   };
+
 
   if (!isValidToken) {
     return (
@@ -109,9 +111,8 @@ const ResetPassword: React.FC = () => {
 
             {message && (
               <div
-                className={`mb-4 p-4 rounded ${
-                  isSuccess ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                }`}
+                className={`mb-4 p-4 rounded ${isSuccess ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                  }`}
               >
                 {message}
               </div>
