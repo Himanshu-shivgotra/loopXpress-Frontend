@@ -4,6 +4,7 @@ import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { categories } from '../../constant/ProductData';
+import axiosInstance from '../../common/axiosInstance';
 
 const EditProduct: React.FC = () => {
   const { id } = useParams();
@@ -16,11 +17,11 @@ const EditProduct: React.FC = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`https://loop-xpress-backend.vercel.app/api/products/product/${id}`);
-        if (!response.ok) {
+        const response = await axiosInstance.get(`/api/products/product/${id}`);
+        if (response.status !== 200) {
           throw new Error('Product not found');
         }
-        const data = await response.json();
+        const data = await response.data;
         if (data.manufacturingDate) {
           data.manufacturingDate = new Date(data.manufacturingDate).toISOString().split('T')[0];
         }
@@ -89,7 +90,7 @@ const EditProduct: React.FC = () => {
         }
       });
 
-      const response = await fetch(`https://loop-xpress-backend.vercel.app/api/products/update-product/${id}`, {
+      const response = await axiosInstance.put(`/api/products/update-product/${id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${authToken}`
@@ -97,12 +98,7 @@ const EditProduct: React.FC = () => {
         body: formData,
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to update product');
-      }
-
-      const data = await response.json();
+      const data = await response.data;
       toast.success('Product updated successfully!');
 
       setTimeout(() => {

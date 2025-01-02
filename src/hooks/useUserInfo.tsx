@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axiosInstance from '../common/axiosInstance';
 
 interface PersonalDetails {
   fullName: string;
@@ -6,7 +7,7 @@ interface PersonalDetails {
   phoneNumber: string;
   address: string;
   password: string;
-  profilePic:string;
+  profilePic: string;
 }
 interface BusinessDetails {
   businessName: string;
@@ -45,19 +46,14 @@ const useUserInfo = () => {
           throw new Error('User not authenticated. Please log in.');
         }
 
-        const response = await fetch('https://loop-xpress-backend.vercel.app/api/users/user-info', {
+        const response = await axiosInstance.get('/api/users/user-info', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Failed to fetch user info');
-        }
-
-        const data = await response.json();
+        const data = await response.data;
         setUserInfo(data);
         setError(null); // Clear errors if successful
       } catch (err: any) {
@@ -81,7 +77,7 @@ const useUserInfo = () => {
         delete updatedDetails.personalDetails.password;
       }
 
-      const response = await fetch('https://loop-xpress-backend.vercel.app/api/users/update-personal-info', {
+      const response = await axiosInstance.put('/api/users/update-personal-info', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -90,12 +86,7 @@ const useUserInfo = () => {
         body: JSON.stringify(updatedDetails),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to update personal info');
-      }
-
-      const updatedUser = await response.json();
+      const updatedUser = await response.data;
       setUserInfo(updatedUser); // Update the state
 
       // Invalidate the old JWT token if the password was updated
@@ -115,7 +106,7 @@ const useUserInfo = () => {
       const token = localStorage.getItem('authToken');
       if (!token) throw new Error('User not authenticated. Please log in.');
 
-      const response = await fetch('https://loop-xpress-backend.vercel.app/api/users/update-business-info', {
+      const response = await axiosInstance.put('/api/users/update-business-info', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -124,12 +115,7 @@ const useUserInfo = () => {
         body: JSON.stringify(updatedDetails),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to update business info');
-      }
-
-      const updatedUser = await response.json();
+      const updatedUser = await response.data;
       setUserInfo(updatedUser); // Update the state
 
       return updatedUser; // Return the updated user object
@@ -149,19 +135,14 @@ const useUserInfo = () => {
           throw new Error('User not authenticated. Please log in.');
         }
 
-        const response = await fetch('https://loop-xpress-backend.vercel.app/api/users/user-info', {
+        const response = await axiosInstance.get('/api/users/user-info', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Failed to fetch user info');
-        }
-
-        const data = await response.json();
+        const data = await response.data;
         setUserInfo(data);
         setError(null);
       } catch (err: any) {

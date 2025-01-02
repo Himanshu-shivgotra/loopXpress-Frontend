@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import axiosInstance from '../../common/axiosInstance';
 
 interface Product {
   _id: string;
@@ -33,17 +34,13 @@ const ProductList = () => {
   const fetchProducts = async () => {
     try {
       const authToken = localStorage.getItem('authToken');
-      const response = await fetch('https://loop-xpress-backend.vercel.app/api/products/my-products', {
+      const response = await axiosInstance.get('/api/products/my-products', {
         headers: {
           'Authorization': `Bearer ${authToken}`,
         },
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch products');
-      }
-
-      const data = await response.json();
+      const data = await response.data;
       setProducts(data);
       setError(null);
     } catch (error) {
@@ -82,16 +79,12 @@ const ProductList = () => {
   const handleConfirmDelete = async (id: string) => {
     try {
       const authToken = localStorage.getItem('authToken');
-      const response = await fetch(`https://loop-xpress-backend.vercel.app/api/products/product/${id}`, {
+      const response = await axiosInstance.delete(`/api/products/product/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${authToken}`,
         },
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete product');
-      }
 
       setProducts(products.filter((product) => product._id !== id));
       toast.success('Product deleted successfully');

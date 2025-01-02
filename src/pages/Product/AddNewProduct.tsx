@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import useUserInfo from '../../hooks/useUserInfo';
 import { ProductData, subcategorySizeMap, categories, sizeOptionsMap } from '../../constant/ProductData';
+import axiosInstance from '../../common/axiosInstance';
 
 type SizeType = 'clothing' | 'shoes' | 'equipment' | 'none';
 
@@ -107,7 +108,7 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
     const authToken = localStorage.getItem("authToken");
 
     try {
-      const response = await fetch('https://loop-xpress-backend.vercel.app/api/products/add-product', {
+      const response = await axiosInstance.post('/api/products/add-product', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${authToken}`,
@@ -115,10 +116,10 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
         body: formData,
       });
 
-      const data = await response.json();
+      const data = await response.data
       console.log('Server response:', data);
 
-      if (!response.ok) {
+      if (response.status === 200) {
         if (data.details) {
           const errorMessage = Array.isArray(data.details)
             ? data.details.map((err: any) => `${err.field}: ${err.message}`).join('\n')
