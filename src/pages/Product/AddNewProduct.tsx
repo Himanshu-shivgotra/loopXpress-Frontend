@@ -6,6 +6,7 @@ import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import useUserInfo from '../../hooks/useUserInfo';
 import { ProductData, subcategorySizeMap, categories, sizeOptionsMap } from '../../constant/ProductData';
 import axiosInstance from '../../common/axiosInstance';
+import { FaTimes, FaPlus } from 'react-icons/fa';
 
 type SizeType = 'clothing' | 'shoes' | 'equipment' | 'none';
 
@@ -35,12 +36,14 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
     warranty: '',
     shippingInfo: '',
     highlights: [''],
-    stockAlert: ''
+    stockAlert: '',
+    colors: [],
   });
 
   const [highlightInput, setHighlightInput] = useState<string>('');
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [colorInputs, setColorInputs] = useState<string[]>(['']); // Initialize with one empty color input
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -84,6 +87,21 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
     });
   };
 
+  const handleColorChange = (index: number, value: string) => {
+    const newColorInputs = [...colorInputs];
+    newColorInputs[index] = value;
+    setColorInputs(newColorInputs);
+  };
+
+  const addColorInput = () => {
+    setColorInputs([...colorInputs, '']); // Add a new empty color input
+  };
+
+  const removeColorInput = (index: number) => {
+    const newColorInputs = colorInputs.filter((_, i) => i !== index);
+    setColorInputs(newColorInputs);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -99,6 +117,9 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
 
     // Append highlights as JSON string
     formData.append('highlights', JSON.stringify(productData.highlights.filter(h => h.trim() !== '')));
+
+    // Append colors as JSON string
+    formData.append('colors', JSON.stringify(colorInputs.filter(color => color.trim() !== '')));
 
     // Append each file
     uploadedFiles.forEach((file) => {
@@ -281,7 +302,7 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
             {/* Basic Information */}
             <div className="mb-8">
               <h2 className="text-xl font-semibold mb-4 text-black dark:text-white">Basic Information</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                   <label className="mb-2.5 block text-black dark:text-white">Title</label>
                   <input
@@ -305,6 +326,42 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
                     required
                   />
                 </div>
+
+                <div>
+                  <label className="mb-2.5 block text-black dark:text-white">Colors</label>
+                  <div className="flex flex-col gap-2">
+                    {colorInputs.map((color, index) => (
+                      <div key={index} className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          value={color}
+                          onChange={(e) => handleColorChange(index, e.target.value)}
+                          placeholder={`Color ${index + 1}`}
+                          className="flex-1 rounded-lg border-[1.5px] border-gray-300 bg-white text-black dark:border-[#dc651d] dark:bg-[#24303f] dark:text-white py-3 px-5 focus:ring-2 focus:ring-[#dc651d] outline-none transition duration-200"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeColorInput(index)}
+                          className="p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition duration-150"
+                          aria-label="Remove color"
+                        >
+                          <FaTimes />
+                        </button>
+                        {index === colorInputs.length - 1 && (
+                          <button
+                            type="button"
+                            onClick={addColorInput}
+                            className="p-1 bg-[#dc651d] text-white rounded-full hover:bg-opacity-90 transition duration-150"
+                            aria-label="Add color"
+                          >
+                            <FaPlus />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
 
                 <div className="col-span-full">
                   <label className="mb-2.5 block text-black dark:text-white">Product Images</label>
@@ -410,6 +467,18 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
                     type="number"
                     name="stockAlert"
                     value={productData.stockAlert}
+                    onChange={handleChange}
+                    className="w-full rounded border-[1.5px] border-gray-300 bg-white text-black dark:border-[#dc651d] dark:bg-[#24303f] dark:text-white py-3 px-5 outline-none transition focus:border-[#dc651d]"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-2.5 block text-black dark:text-white">Weight</label>
+                  <input
+                    type="number"
+                    name="weight"
+                    value={productData.weight}
                     onChange={handleChange}
                     className="w-full rounded border-[1.5px] border-gray-300 bg-white text-black dark:border-[#dc651d] dark:bg-[#24303f] dark:text-white py-3 px-5 outline-none transition focus:border-[#dc651d]"
                     required
