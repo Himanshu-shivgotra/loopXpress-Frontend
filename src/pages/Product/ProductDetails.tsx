@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
+import axiosInstance from '../../common/axiosInstance';
 
 interface Product {
   _id: string;
@@ -38,11 +39,9 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`https://loop-xpress-backend.vercel.app/api/products/product/${id}`);
-        if (!response.ok) {
-          throw new Error('Product not found');
-        }
-        const data = await response.json();
+        const response = await axiosInstance.get(`/api/products/product/${id}`);
+
+        const data = await response.data;
         setProduct(data);
 
         // Combine image URLs and Base64 images into a single array for display
@@ -140,8 +139,8 @@ const ProductDetails = () => {
                     key={index}
                     onClick={() => selectImage(index)}
                     className={`cursor-pointer rounded-lg overflow-hidden transform transition-all duration-300 hover:scale-105 ${currentImageIndex === index
-                        ? 'border-2 border-[#dc651d] shadow-lg scale-105'
-                        : 'border-2 border-transparent hover:border-gray-300 dark:hover:border-boxdark-2'
+                      ? 'border-2 border-[#dc651d] shadow-lg scale-105'
+                      : 'border-2 border-transparent hover:border-gray-300 dark:hover:border-boxdark-2'
                       }`}
                   >
                     <img

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axiosInstance from "../../common/axiosInstance";
 
 const BusinessDetails: React.FC<{
   data: any;
@@ -23,15 +24,15 @@ const BusinessDetails: React.FC<{
       if (gstRegex.test(value)) {
         const originalGstNumber = value;
 
-         const isGstExists = await checkGstInDatabase(value);
+        const isGstExists = await checkGstInDatabase(value);
 
-         if (isGstExists) {
-           setFormErrors({
-             ...formErrors,
-             gstNumber: "This GST number is already registered with another account."
-           });
-           setGstDetails(null);
-           return;
+        if (isGstExists) {
+          setFormErrors({
+            ...formErrors,
+            gstNumber: "This GST number is already registered with another account."
+          });
+          setGstDetails(null);
+          return;
         }
 
         await verifyGstNumber(value);
@@ -51,7 +52,7 @@ const BusinessDetails: React.FC<{
 
   const checkGstInDatabase = async (gstNumber: string) => {
     try {
-      const response = await fetch("https://loop-xpress-backend.vercel.app/api/gst/check-exists", {
+      const response = await axiosInstance.post("/api/gst/check-exists", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -61,7 +62,7 @@ const BusinessDetails: React.FC<{
         }),
       });
 
-      const result = await response.json();
+      const result = await response.data;
       return result.exists;
 
     } catch (error) {
@@ -79,7 +80,7 @@ const BusinessDetails: React.FC<{
     try {
       console.log('Frontend: Sending GST verification request for:', gstNumber);
 
-      const response = await fetch("https://loop-xpress-backend.vercel.app/api/gst/verify-gst", {
+      const response = await axiosInstance.post("/api/gst/verify-gst", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -89,17 +90,17 @@ const BusinessDetails: React.FC<{
         }),
       });
 
-      const contentType = response.headers.get("content-type");
+      const contentType = response.headers["content-type"];
       let result;
       if (contentType && contentType.includes("application/json")) {
-        result = await response.json();
+        result = await response.data;
       } else {
         throw new Error("Received non-JSON response");
       }
 
       console.log("Frontend: Received API Response:", result);
 
-      if (!response.ok) {
+      if (response.status === 200) {
         setFormErrors({
           ...formErrors,
           gstNumber: result.message || "GST verification failed."
