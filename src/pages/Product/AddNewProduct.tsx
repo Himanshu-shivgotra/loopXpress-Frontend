@@ -322,18 +322,16 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
                         >
                           <FaTimes />
                         </button>
-                        {index === colorInputs.length - 1 && (
-                          <button
-                            type="button"
-                            onClick={addColorInput}
-                            className="p-1 bg-[#dc651d] text-white rounded-full hover:bg-opacity-90 transition duration-150"
-                            aria-label="Add color"
-                          >
-                            <FaPlus />
-                          </button>
-                        )}
                       </div>
                     ))}
+                    <button
+                      type="button"
+                      onClick={addColorInput}
+                      className="py-2 px-3 bg-[#dc651d] text-white rounded-lg hover:bg-opacity-90 transition duration-150 text-sm"
+                      aria-label="Add color"
+                    >
+                      <FaPlus /> Add Color
+                    </button>
                   </div>
                 </div>
 
@@ -506,9 +504,10 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
                     <button
                       type="button"
                       onClick={() => removeHighlight(index)}
-                      className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                      className="p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition duration-150"
+                      aria-label="Remove color"
                     >
-                      Remove
+                      <FaTimes />
                     </button>
                   </div>
                 ))}
