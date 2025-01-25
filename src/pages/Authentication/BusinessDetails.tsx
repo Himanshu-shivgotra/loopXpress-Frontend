@@ -88,8 +88,6 @@ const BusinessDetails: React.FC<{
   const verifyGstNumber = async (gstNumber: string) => {
     setIsVerifying(true);
     try {
-      console.log('Frontend: Sending GST verification request for:', gstNumber);
-
       const response = await axiosInstance.post("/api/gst/verify-gst", {
         gstin: gstNumber,
       }, {
@@ -106,8 +104,6 @@ const BusinessDetails: React.FC<{
         throw new Error("Received non-JSON response");
       }
 
-      console.log("Frontend: Received API Response:", result);
-
       if (!result.success || !result.data) {
         setFormErrors({
           ...formErrors,
@@ -120,14 +116,14 @@ const BusinessDetails: React.FC<{
       console.log("Frontend: Setting GST Details:", result.data);
       setGstDetails(result.data);
 
-        onChange({
-          ...data,
-          businessName: result.data.legalName,
-          businessType: result.data.businessType,
-          brandName: data.brandName,
-          address: result.data.address,
-          gstDetails: result.data
-        });
+      onChange({
+        ...data,
+        businessName: result.data.legalName,
+        businessType: result.data.businessType,
+        brandName: data.brandName,
+        address: result.data.address,
+        gstDetails: result.data
+      });
 
       setFormErrors({ ...formErrors, gstNumber: "" });
       return true;
@@ -193,10 +189,6 @@ const BusinessDetails: React.FC<{
     if (!validateForm()) return;
     onNext();
   };
-
-  useEffect(() => {
-    console.log("Frontend: Current gstDetails state:", gstDetails);
-  }, [gstDetails]);
 
   useEffect(() => {
     if (data.gstDetails) {

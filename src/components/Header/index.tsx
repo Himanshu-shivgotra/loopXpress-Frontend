@@ -17,7 +17,6 @@ const Header = (props: {
   // Fetch user data on component mount
   useEffect(() => {
     const token = localStorage.getItem('authToken');
-    console.log('Token:', token); // Check if token is available
     if (token) {
       const fetchUser = async () => {
         try {
@@ -49,7 +48,7 @@ const Header = (props: {
 
   const handleLogout = () => {
     localStorage.removeItem('authToken'); // Clear the token
-    navigate("/auth/signin"); 
+    navigate("/auth/signin");
   };
 
   return (
