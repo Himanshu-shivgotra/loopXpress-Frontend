@@ -4,6 +4,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import useUserInfo from '../../hooks/useUserInfo';
+
 import { ProductData, subcategorySizeMap, categories, sizeOptionsMap } from '../../constant/ProductData';
 import axiosInstance from '../../common/axiosInstance';
 import { FaTimes, FaPlus } from 'react-icons/fa';
@@ -139,7 +140,6 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
       );
 
       const data = response.data;
-      console.log('Server response:', data);
 
       if (response.status === 200) {
         if (data.details) {

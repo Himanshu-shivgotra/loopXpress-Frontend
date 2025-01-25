@@ -12,7 +12,6 @@ const BankDetails: React.FC<{
     // Validate function
     const validate = () => {
         const newErrors: any = {};
-
         // Basic validation for required fields
         if (!data.bankName) newErrors.bankName = "Bank Name is required.";
         if (!data.accountNumber || !/^\d+$/.test(data.accountNumber) || data.accountNumber.length < 10) {
@@ -80,12 +79,10 @@ const BankDetails: React.FC<{
 
     // Handle Next button click
     const handleNext = async () => {
-        console.log("Handle Next called"); // Debug to see if onNext is triggered
         if (validate()) {
-            console.log("Validation passed. Proceeding to next step.");
             await onNext(); // Proceed only after validation passes
         } else {
-            console.log("Validation failed. Can't proceed.");
+            console.error("Validation failed. Can't proceed.");
         }
     };
 
