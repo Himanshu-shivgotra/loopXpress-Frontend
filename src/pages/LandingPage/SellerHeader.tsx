@@ -1,0 +1,119 @@
+import React from 'react';
+import { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
+import loopLogo from "../../assets/logo/looplogo.png"
+
+const SellerNavbar = () => {
+    const [menuOpen, setMenuOpen] = useState(false)
+    const [isScrolled, setIsScrolled] = useState(false)
+
+    const handleMenuToggle = () => {
+        setMenuOpen(!menuOpen)
+    }
+
+    const handleScroll = () => {
+        if (window.scrollY > 50) {
+            setIsScrolled(true)
+        } else {
+            setIsScrolled(false)
+        }
+    }
+
+    useEffect(() => {
+        window.addEventListener("scroll", handleScroll)
+        return () => {
+            window.removeEventListener("scroll", handleScroll)
+        }
+    }, [])
+
+    return (
+        <div
+            className={`fixed top-0 left-0 w-full z-50 text-white transition-all duration-500 ease-in-out ${isScrolled ? "bg-[#141414] shadow-md" : "bg-transparent"
+                }`}
+        >
+            <div className="container lg:px-20 md:px-8 sm:px-4">
+                <nav className="flex justify-between items-center">
+                    {/* Logo Section */}
+                    <div className="flex items-center space-x-2">
+                        <Link to="/">
+                            <img
+                                src={loopLogo} alt="Logo"
+                                className="h-20"
+                            />
+                        </Link>
+                    </div>
+
+                    {/* Mobile Menu Button */}
+                    <div className="md:hidden">
+                        <button
+                            onClick={handleMenuToggle}
+                            className="text-white focus:outline-none"
+                        >
+                            <span
+                                className={`block w-6 h-0.5 bg-white mb-1 transition-transform duration-300 ${menuOpen ? "rotate-45 translate-y-1.5" : ""
+                                    }`}
+                            ></span>
+                            <span
+                                className={`block w-6 h-0.5 bg-white mb-1 transition-opacity duration-300 ${menuOpen ? "opacity-0" : "opacity-100"
+                                    }`}
+                            ></span>
+                            <span
+                                className={`block w-6 h-0.5 bg-white transition-transform duration-300 ${menuOpen ? "-rotate-45 -translate-y-1.5" : ""
+                                    }`}
+                            ></span>
+                        </button>
+                    </div>
+
+                    {/* Desktop Buttons */}
+                    <div className="hidden md:flex space-x-4">
+                        <Link to="/auth/signin">
+                            <button
+                                className="bg-[#ff7722] text-white border-2 border-white  font-bold py-2 px-4 hover:text-black hover:bg-white"
+                            >
+                                Login
+                            </button>
+                        </Link>
+                        <Link to="/auth/signup">
+                            <button
+                                className="bg-transparent text-white border-2-white font-bold py-2 px-4 hover:text-black hover:bg-white"
+                            >
+                                Start Selling
+                            </button>
+                        </Link>
+                    </div>
+                </nav>
+
+                {/* Mobile Menu */}
+                <div
+                    className={`md:hidden bg-[#141414] transition-all duration-500 ease-in-out ${menuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+                        }`}
+                    style={{
+                        overflow: "hidden"
+                    }}
+                >
+                    <div className="text-white py-4 px-6 text-center">
+
+                        <div className="flex flex-col items-center space-y-4 mt-4">
+                            <Link to="/auth/signin">
+                                <button
+                                    className="bg-[#ff7722] text-white border-2-white font-bold py-2 px-4 hover:text-black hover:bg-white"
+                                >
+                                    Login
+                                </button>
+                            </Link>
+                            <Link to="/auth/signup">
+                                <button
+                                    className="bg-transparent text-white border-2 border-white font-bold py-2 px-4 hover:text-black hover:bg-white"
+                                >
+                                    Start Selling
+                                </button>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default SellerNavbar
