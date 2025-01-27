@@ -14,6 +14,7 @@
     "url": "https://loop.com"
   },
   "dependencies": {
+
     "@types/react-color": "^3.0.13",
     "apexcharts": "^3.41.0",
     "axios": "^1.7.7",
