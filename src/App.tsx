@@ -32,15 +32,40 @@ function App() {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  const token = localStorage.getItem('authToken');
   useEffect(() => {
-    setIsAuthenticated(!!token);
-    if (token === "undefined") {
-      localStorage.removeItem('authToken');
-      navigate('/auth/signin')
+    const token = localStorage.getItem('authToken');
+    
+    // Check if token exists and is valid
+    if (!token || token === "undefined" || token === "null") {
+      localStorage.removeItem('authToken'); // Clean up invalid token
+      setIsAuthenticated(false);
+      if (!pathname.startsWith('/auth/') && pathname !== '/') {
+        navigate('/auth/signin');
+      }
+    } else {
+      // Verify token expiration
+      try {
+        const tokenData = JSON.parse(atob(token.split('.')[1]));
+        const expirationTime = tokenData.exp * 1000; // Convert to milliseconds
+        
+        if (Date.now() >= expirationTime) {
+          // Token has expired
+          localStorage.removeItem('authToken');
+          setIsAuthenticated(false);
+          navigate('/auth/signin');
+        } else {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        // Invalid token format
+        console.error('Invalid token format:', error);
+        localStorage.removeItem('authToken');
+        setIsAuthenticated(false);
+        navigate('/auth/signin');
+      }
     }
     setLoading(false);
-  }, [token]);
+  }, [pathname, navigate]);
 
   if (loading) {
     return <Loader />;
