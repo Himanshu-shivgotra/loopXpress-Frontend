@@ -13,6 +13,7 @@ interface BusinessDetails {
   businessName: string;
   businessType: string;
   businessPhone: string;
+  brandName: string;
   businessEmail: string;
   gstNumber: string;
 }
