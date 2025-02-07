@@ -106,13 +106,53 @@ const ProductList = () => {
 
   if (loading) {
     return (
-      <div className="text-center p-4">
-        <div className="grid grid-cols-4 gap-4">
-          {Array.from({ length: productsPerPage }).map((_, index) => (
-            <div
-              key={index}
-              className="h-60 bg-gray-200 rounded-md animate-pulse shadow-md"
-            />
+      <div className="container mx-auto p-6 bg-navy-900 text-black-200">
+        {/* Search Header Skeleton */}
+        <div className="mb-8 animate-pulse">
+          <div className="flex flex-col sm:flex-col md:flex-row justify-between items-center bg-navy-800 p-6 rounded-lg shadow-md gap-4">
+            <div className="h-10 bg-gray-700 rounded-lg w-64"></div>
+            <div className="h-12 bg-gray-700 rounded-lg w-full md:w-1/3"></div>
+            <div className="h-12 bg-gray-700 rounded-lg w-full md:w-48"></div>
+          </div>
+        </div>
+
+        {/* Mobile Skeleton */}
+        <div className="sm:hidden grid grid-cols-1 gap-4">
+          {[...Array(4)].map((_, index) => (
+            <div key={index} className="border border-gray-700 rounded-lg shadow-md p-4 bg-navy-800">
+              <div className="w-full h-40 bg-gray-700 rounded-md mb-3"></div>
+              <div className="h-4 bg-gray-600 rounded mb-2 w-3/4"></div>
+              <div className="h-4 bg-gray-600 rounded mb-2 w-1/2"></div>
+              <div className="flex gap-2 mb-3">
+                <div className="h-4 bg-gray-600 rounded w-1/4"></div>
+                <div className="h-4 bg-gray-600 rounded w-1/4"></div>
+              </div>
+              <div className="h-8 bg-gray-700 rounded mb-2"></div>
+              <div className="h-8 bg-gray-700 rounded"></div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop Skeleton */}
+        <div className="hidden sm:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {[...Array(8)].map((_, index) => (
+            <div key={index} className="border border-gray-700 rounded-lg shadow-md p-2 flex flex-col bg-navy-800">
+              <div className="w-full h-40 bg-gray-700 rounded-md mb-2"></div>
+              <div className="h-4 bg-gray-600 rounded mb-2 w-3/4"></div>
+              <div className="h-4 bg-gray-600 rounded mb-2 w-1/2"></div>
+              <div className="flex gap-1 mb-2">
+                <div className="h-4 bg-gray-600 rounded w-1/4"></div>
+                <div className="h-4 bg-gray-600 rounded w-1/4"></div>
+              </div>
+              <div className="flex justify-between mb-4">
+                <div className="h-4 bg-gray-600 rounded w-1/3"></div>
+                <div className="h-4 bg-gray-600 rounded w-1/4"></div>
+              </div>
+              <div className="flex gap-2 mt-auto">
+                <div className="h-8 bg-gray-700 rounded w-full"></div>
+                <div className="h-8 bg-gray-700 rounded w-full"></div>
+              </div>
+            </div>
           ))}
         </div>
       </div>
