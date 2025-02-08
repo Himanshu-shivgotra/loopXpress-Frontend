@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import loopLogo from "../../assets/logo/looplogo.png"
+import adrenalLogo from "../../assets/logo/Adrenal_Go_logo.png"
 
 const SellerNavbar = () => {
     const [menuOpen, setMenuOpen] = useState(false)
@@ -12,7 +12,7 @@ const SellerNavbar = () => {
     }
 
     const handleScroll = () => {
-        if (window.scrollY > 50) {
+        if (window.innerWidth >= 768 && window.scrollY > 50) {
             setIsScrolled(true)
         } else {
             setIsScrolled(false)
@@ -28,8 +28,11 @@ const SellerNavbar = () => {
 
     return (
         <div
-            className={`fixed top-0 left-0 w-full z-50 text-white transition-all duration-500 ease-in-out ${isScrolled ? "bg-[#141414] shadow-md" : "bg-transparent"
-                }`}
+            className={`fixed top-0 left-0 w-full z-50 text-white transition-all duration-500 ease-in-out ${
+                isScrolled || (menuOpen && window.innerWidth < 768) 
+                    ? "bg-[#141414] shadow-md" 
+                    : "bg-transparent"
+            }`}
         >
             <div className="container lg:px-20 md:px-8 sm:px-4">
                 <nav className="flex justify-between items-center">
@@ -37,8 +40,8 @@ const SellerNavbar = () => {
                     <div className="flex items-center space-x-2">
                         <Link to="/">
                             <img
-                                src={loopLogo} alt="Logo"
-                                className="h-20"
+                                src={adrenalLogo} alt="Logo"
+                                className="h-12 sm:h-18 m-4"
                             />
                         </Link>
                     </div>
@@ -91,12 +94,12 @@ const SellerNavbar = () => {
                         overflow: "hidden"
                     }}
                 >
-                    <div className="text-white py-4 px-6 text-center">
+                    <div className="text-white pb-4 text-center">
 
-                        <div className="flex flex-col items-center space-y-4 mt-4">
+                        <div className="flex items-center justify-around mt-4">
                             <Link to="/auth/signin">
                                 <button
-                                    className="bg-[#ff7722] text-white border-2-white font-bold py-2 px-4 hover:text-black hover:bg-white"
+                                    className="bg-[#ff7722] w-[8rem] text-white border-2-white font-bold py-2 px-4 hover:text-black hover:bg-white"
                                 >
                                     Login
                                 </button>

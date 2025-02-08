@@ -4,7 +4,8 @@ import DropdownNotification from './DropdownNotification';
 import DropdownUser from './DropdownUser';
 import DarkModeSwitcher from './DarkModeSwitcher';
 import axiosInstance from '../../common/axiosInstance';
-import loopLogo from "../../assets/logo/looplogo.png"
+// import loopLogo from "../../assets/logo/looplogo.png"
+import adrenalLogo from "../../assets/logo/Adrenal_Go_logo.png"
 import useUserInfo from '../../hooks/useUserInfo';
 
 const Header = (props: {
@@ -70,7 +71,7 @@ const Header = (props: {
           </button>
 
           <Link className="block flex-shrink-0 lg:hidden " to="/">
-            <img className='h-12' src={loopLogo} alt="Logo" />
+            <img className='h-30' src={adrenalLogo} alt="Logo" />
           </Link>
         </div>
 

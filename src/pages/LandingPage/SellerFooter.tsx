@@ -1,5 +1,5 @@
 import React from 'react';
-import loopLogo from "../../assets/logo/looplogo.png"
+import adrenalLogo from "../../assets/logo/Adrenal_Go_logo.png"
 import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 
 const Footer = () => {
@@ -10,7 +10,7 @@ const Footer = () => {
                     {/* Logo Section */}
                     <div className="flex flex-col items-start">
                         <img
-                            src={loopLogo} alt="Logo"
+                            src={adrenalLogo} alt="Logo"
                             className="w-32 mb-4"
                         />
                         <p className="text-gray-300">

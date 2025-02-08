@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import loopLogo from "../../assets/logo/looplogo.png"
+import adrenalLogo from "../../assets/logo/Adrenal_Go_logo.png"
 import { FaHome } from "react-icons/fa"; // Importing an icon from react-icons
 
 export const AuthHeader = () => {
@@ -15,9 +15,9 @@ export const AuthHeader = () => {
                         <div className="flex items-center space-x-2">
                             <Link to="/">
                                 <img
-                                    src={loopLogo}
+                                    src={adrenalLogo}
                                     alt="Logo"
-                                    className="h-20"
+                                    className="h-18 m-4"
                                 />
                             </Link>
                         </div>
@@ -26,9 +26,9 @@ export const AuthHeader = () => {
                         <div>
                             <Link
                                 to="/"
-                                className="flex items-center text-[#f9802c] space-x-2 text-lg font-medium hover:text-[#f97316]"
+                                className="flex items-center text-[#f9802c]  text-lg font-medium hover:text-[#f97316]"
                             >
-                                <FaHome className="mr-2 hover:ml-1" /> {/* Backward arrow icon */}
+                                <FaHome className="mr-2 hover:ml-1" /> 
                                 <span>Home</span>
                             </Link>
                         </div>
