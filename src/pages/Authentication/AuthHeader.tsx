@@ -9,7 +9,7 @@ export const AuthHeader = () => {
             <div
                 className={`w-full z-50 text-white transition-all duration-500 ease-in-out bg-transparent mb-2`}
             >
-                <div className="container mx-auto px-10">
+                <div className="container md:mx-auto md:px-10">
                     <nav className="flex justify-between items-center">
                         {/* Logo Section */}
                         <div className="flex items-center space-x-2">
@@ -17,7 +17,7 @@ export const AuthHeader = () => {
                                 <img
                                     src={adrenalLogo}
                                     alt="Logo"
-                                    className="h-18 m-4"
+                                    className="h-12 m-4"
                                 />
                             </Link>
                         </div>
@@ -28,7 +28,7 @@ export const AuthHeader = () => {
                                 to="/"
                                 className="flex items-center text-[#f9802c]  text-lg font-medium hover:text-[#f97316]"
                             >
-                                <FaHome className="mr-2 hover:ml-1" /> 
+                                <FaHome className="mx-2 hover:ml-1" /> 
                                 <span>Home</span>
                             </Link>
                         </div>

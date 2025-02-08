@@ -12,7 +12,7 @@ const SellerNavbar = () => {
     }
 
     const handleScroll = () => {
-        if (window.innerWidth >= 768 && window.scrollY > 50) {
+        if (window.scrollY > 40) {
             setIsScrolled(true)
         } else {
             setIsScrolled(false)
@@ -28,7 +28,7 @@ const SellerNavbar = () => {
 
     return (
         <div
-            className={`fixed top-0 left-0 w-full z-50 text-white transition-all duration-500 ease-in-out ${
+            className={`fixed top-0 left-0 w-full z-50 text-white transition-all duration-400 ease-in-out ${
                 isScrolled || (menuOpen && window.innerWidth < 768) 
                     ? "bg-[#141414] shadow-md" 
                     : "bg-transparent"
