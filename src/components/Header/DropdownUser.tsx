@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import ClickOutside from '../ClickOutside';
 import useUserInfo from '../../hooks/useUserInfo';
 
@@ -15,8 +15,14 @@ interface DropdownUserProps {
 }
 const DropdownUser: React.FC<DropdownUserProps> = ({ user, onLogout }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const location = useLocation();
 
   const { userInfo } = useUserInfo();
+
+  // Close dropdown when path changes
+  useEffect(() => {
+    setDropdownOpen(false);
+  }, [location.pathname]);
 
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
