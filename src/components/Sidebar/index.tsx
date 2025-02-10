@@ -69,7 +69,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6">
         <NavLink to="/">
-          <img src={adrenalLogo} className='h-16 m-4' alt="Logo" />
+          <img src={adrenalLogo} className='h-12 my-4' alt="Logo" />
         </NavLink>
 
         <button
