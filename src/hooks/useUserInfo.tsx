@@ -43,8 +43,15 @@ const useUserInfo = () => {
     const fetchUserInfo = async () => {
       try {
         const token = localStorage.getItem('authToken');
+        const role = localStorage.getItem('role');
+        
         if (!token) {
-          throw new Error('User not authenticated. Please log in.');
+          throw new Error('User not authenticated.');
+        }
+
+        if (role === 'admin') {
+          setLoading(false);
+          return;
         }
 
         const response = await axiosInstance.get('/api/users/user-info', {
@@ -56,7 +63,7 @@ const useUserInfo = () => {
 
         const data = await response.data;
         setUserInfo(data);
-        setError(null); // Clear errors if successful
+        setError(null); 
       } catch (err: any) {
         const message = err.message || 'Failed to fetch user info';
         setError({ message });

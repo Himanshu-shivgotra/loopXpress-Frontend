@@ -28,12 +28,17 @@ const SignIn: React.FC = () => {
                 password,
             });
 
-            const { token } = response.data;
+            const { token, user, admin } = response.data;
             if (!token) {
                 throw new Error("No token received from the server.");
             }
 
             localStorage.setItem("authToken", token);
+       
+            const role = admin?.role || user?.role;
+            if (role) {
+                localStorage.setItem("role", role);
+            }
 
             navigate("/dashboard");
         } catch (error: any) {
@@ -118,7 +123,7 @@ const SignIn: React.FC = () => {
 
                             <div className="mt-6 text-center">
                                 <p className="text-sm sm:text-base">
-                                    Don’t have an account?{" "}
+                                    Don't have an account?{" "}
                                     <Link to="/auth/signup" className="text-primary">
                                         Sign Up
                                     </Link>
