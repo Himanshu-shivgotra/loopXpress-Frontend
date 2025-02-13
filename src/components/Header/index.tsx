@@ -4,9 +4,7 @@ import DropdownNotification from './DropdownNotification';
 import DropdownUser from './DropdownUser';
 import DarkModeSwitcher from './DarkModeSwitcher';
 import axiosInstance from '../../common/axiosInstance';
-// import loopLogo from "../../assets/logo/looplogo.png"
 import adrenalLogo from "../../assets/logo/Adrenal_Go_logo.png"
-import useUserInfo from '../../hooks/useUserInfo';
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
@@ -18,20 +16,32 @@ const Header = (props: {
   // Fetch user data on component mount
   useEffect(() => {
     const token = localStorage.getItem('authToken');
-    if (token) {
-      const fetchUser = async () => {
+    const role = localStorage.getItem('role');
+    
+    if (token && role) {
+      const fetchData = async () => {
         try {
-          const response = await axiosInstance.get('/api/users/user-info', { // Use axiosInstance
+          let endpoint = '/api/users/user-info';
+          
+          // Set endpoint based on role
+          if (role === 'admin') {
+            endpoint = '/api/admin/admin-info';
+          } else if (role === 'seller') {
+            endpoint = '/api/users/user-info';
+          }
+
+          const response = await axiosInstance.get(endpoint, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
 
-          if (response.status === 200) { // Check for successful response
-            setUser(response.data); // Set user data
+          if (response.status === 200) {
+            setUser(response.data);
           } else if (response.status === 401) {
             console.error('Unauthorized, redirecting to login');
             localStorage.removeItem('authToken');
+            localStorage.removeItem('role');
             navigate('/auth/signin');
           } else {
             console.error('Failed to fetch user data:', response.statusText);
@@ -41,14 +51,15 @@ const Header = (props: {
         }
       };
 
-      fetchUser();
+      fetchData();
     } else {
-      console.error('No token found');
+      console.error('No token or role found');
     }
-  }, [navigate]);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('authToken'); // Clear the token
+    localStorage.removeItem('role');
     navigate("/auth/signin");
   };
 

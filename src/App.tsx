@@ -21,6 +21,7 @@ import EditProduct from './pages/Product/EditProduct';
 import ForgotPassword from './pages/Authentication/ForgetPassword';
 import ResetPassword from './pages/Authentication/ResetPassword';
 import Payouts from './pages/Payouts/Payouts';
+import Inventory from './pages/Warehouse/Inventory';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -127,6 +128,8 @@ function App() {
           <Route path="/seller/edit-product/:id" element={<EditProduct />} />
           <Route path="/seller/product-list" element={<ProductList />} />
           <Route path="/seller/product/:id" element={<ProductDetails />} />
+          <Route path='/inventory' element={<Inventory/>} />
+          
         </Route>
 
 
