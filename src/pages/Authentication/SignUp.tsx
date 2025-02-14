@@ -71,7 +71,11 @@ const MultiStepForm: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!validateFormData()) {
-      setErrorMessage("All fields must be filled out.");
+      toast.error("All fields must be filled out.", 
+        {
+          duration:2000,
+        }
+      );
       return;
     }
 

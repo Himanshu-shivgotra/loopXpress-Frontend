@@ -5,10 +5,11 @@ import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import useUserInfo from '../../hooks/useUserInfo';
 import { ProductData, subcategorySizeMap, categories, sizeOptionsMap } from '../../constant/ProductData';
 import axiosInstance from '../../common/axiosInstance';
-import { FaTimes, FaPlus } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 import { ChromePicker } from 'react-color';
 import { colornames } from 'color-name-list';
 import nearestColor from 'nearest-color';
+import useAdminInfo from "../../hooks/useAdminInfo"
 
 interface AddNewProductProps {
   onProductAdded: () => void;
@@ -21,7 +22,9 @@ interface ColorInput {
 
 const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
 
-  const { userInfo } = useUserInfo(); // Fetch user info
+  const { adminInfo } = useAdminInfo(); 
+  const { userInfo } = useUserInfo();1
+  const role = localStorage.getItem('role');
   const [productData, setProductData] = useState<ProductData>({
     name: userInfo?.personalDetails?.fullName || '', // Initialize username
     title: '',
@@ -100,7 +103,7 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
     try {
       // Get the nearest color name
       const result = nearest(hex);
-      // The result will be the name of the closest matching color
+      
       return result.name || 'Custom Color';
     } catch (error) {
       console.error('Error finding color name:', error);
@@ -143,6 +146,7 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
     setIsSubmitting(true);
 
     const formData = new FormData();
+    const authToken = localStorage.getItem("authToken");
 
     // Append all text fields
     Object.entries(productData).forEach(([key, value]) => {
@@ -167,13 +171,15 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
 
     // Append each file
     uploadedFiles.forEach((file) => {
-      formData.append('images', file);
+      formData.append('images', file)
     });
 
-    const authToken = localStorage.getItem("authToken");
-
     try {
-      const response = await axiosInstance.post('/api/products/add-product',
+      const endpoint = role === 'admin' 
+        ? '/api/inventory/add-product-inventory' 
+        : '/api/products/add-product';
+        
+      const response = await axiosInstance.post(endpoint,
         formData,
         {
           headers: {
@@ -315,7 +321,11 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
             {/* Username */}
             <div>
               <h3 className="mb-2 text-2xl font-bold text-orange-500">
-                {userInfo?.personalDetails?.fullName ? userInfo?.personalDetails?.fullName.charAt(0).toUpperCase() + userInfo?.personalDetails?.fullName.slice(1) : 'Name not available'}
+                {role === 'admin' 
+                  ? adminInfo?.name || 'Admin Name Not Available'
+                  : userInfo?.personalDetails?.fullName 
+                    ? userInfo.personalDetails.fullName.charAt(0).toUpperCase() + userInfo.personalDetails.fullName.slice(1) 
+                    : 'Name not available'}
               </h3>
             </div>
 
@@ -422,7 +432,6 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
                     </div>
                   </div>
                 </div>
-
 
                 <div className="col-span-full">
                   <label className="mb-2.5 block text-black dark:text-white">Product Images</label>

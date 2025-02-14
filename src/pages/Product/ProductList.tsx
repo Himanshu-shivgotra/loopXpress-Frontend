@@ -12,6 +12,15 @@ interface Product {
   category: string;
   quantity: number;
   imageUrls: string[];
+  product?: {
+    imageUrls: string[];
+    title: string;
+    brand: string;
+    originalPrice: number;
+    discountedPrice: number;
+    category: string;
+    quantity: number;
+  };
 }
 
 const ProductList = () => {
@@ -22,6 +31,7 @@ const ProductList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
   const navigate = useNavigate();
+  const role  = localStorage.getItem('role');
 
   useEffect(() => {
     fetchProducts();
@@ -33,15 +43,25 @@ const ProductList = () => {
 
   const fetchProducts = async () => {
     try {
+      const endpoint = role === 'admin' 
+        ? '/api/inventory/' 
+        : '/api/products/my-products';
       const authToken = localStorage.getItem('authToken');
-      const response = await axiosInstance.get('/api/products/my-products', {
+      const response = await axiosInstance.get(endpoint, {
         headers: {
-          'Authorization': `Bearer ${authToken}`,
-        },
+          'Authorization': `Bearer ${authToken}`
+        }
       });
-
       const data = await response.data;
-      setProducts(data);
+      // Transform data for admin role
+      const transformedData = role === 'admin' 
+        ? data.map((item: any) => ({
+            ...item,
+            ...item.product,
+            quantity: item.quantity
+          }))
+        : data;
+      setProducts(transformedData);
       setError(null);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -166,7 +186,7 @@ const ProductList = () => {
   if (products.length === 0) {
     return (
       <div className="text-center p-6">
-        <p className="text-gray-600 text-lg">No products found.</p>
+        <p className="text-gray-600 text-lg">{role === 'admin'? "No product found in Inventory." : "No products found."}</p>
         <Link
           to="/add-new-product"
           className="mt-4 inline-block px-6 py-3 text-white bg-orange-500 rounded-lg shadow-lg hover:bg-orange-600 transition"
@@ -181,7 +201,7 @@ const ProductList = () => {
     <div className="container mx-auto p-6 bg-navy-900 text-black-200">
       <div className="mb-8">
         <div className="flex text-orange-500 flex-col sm:flex-col md:flex-row justify-between items-center bg-navy-800 p-6 rounded-lg shadow-md gap-4">
-          <h1 className="text-3xl font-bold">My Products</h1>
+          <h1 className="text-3xl font-bold">{role==='admin'? "Inventory" : "My Products"}</h1>
           <div className="w-full md:w-1/3">
             <input
               type="text"
@@ -201,45 +221,47 @@ const ProductList = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {currentProducts.map((product) => (
-          <div
-            key={product._id}
-            className="border border-gray-700 rounded-lg shadow-md p-2 flex flex-col bg-navy-800 hover:shadow-xl hover:transform hover:scale-105 transition duration-300"
-          >
-            <img
-              src={product.imageUrls[0]}
-              alt={product.title}
-              className="w-full h-40 object-cover rounded-md mb-2"
-            />
-            <h2 className="text-lg font-semibold mb-2 overflow-hidden text-ellipsis whitespace-nowrap text-black-100">
-              {product.title}
-            </h2>
-            <p className="text-black-300 mb-2"> {product.brand}</p>
-            <div className="flex items-center gap-1 mb-2">
-              <span className="text-gray-400 line-through">₹{product.originalPrice}</span>
-              <span className="text-orange-400 font-bold">₹{product.discountedPrice}</span>
-            </div>
-            <div className="flex justify-between items-center text-sm text-black-400 mb-4">
-              <span>{product.category}</span>
-              <span>Stock: {product.quantity}</span>
-            </div>
+        {currentProducts.map((product) => {
+          return (
+            <div
+              key={product._id}
+              className="border border-gray-700 rounded-lg shadow-md p-2 flex flex-col bg-navy-800 hover:shadow-xl hover:transform hover:scale-105 transition duration-300"
+            >
+              <img
+                src={product.imageUrls[0]}
+                alt={product.title}
+                className="w-full h-40 object-cover rounded-md mb-2"
+              />
+              <h2 className="text-lg font-semibold mb-2 overflow-hidden text-ellipsis whitespace-nowrap text-black-100">
+                {product.title}
+              </h2>
+              <p className="text-black-300 mb-2"> {product.brand}</p>
+              <div className="flex items-center gap-1 mb-2">
+                <span className="text-gray-400 line-through">₹{product.originalPrice}</span>
+                <span className="text-orange-400 font-bold">₹{product.discountedPrice}</span>
+              </div>
+              <div className="flex justify-between items-center text-sm text-black-400 mb-4">
+                <span>{product.category}</span>
+                <span>Stock: {product.quantity}</span>
+              </div>
 
-            <div className="mt-auto flex gap-2">
-              <button
-                onClick={() => navigate(`/product/${product._id}`)}
-                className="w-full bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition"
-              >
-                Details
-              </button>
-              <button
-                onClick={() => deleteProduct(product._id)}
-                className="w-full bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
-              >
-                Delete
-              </button>
+              <div className="mt-auto flex gap-2">
+                <button
+                  onClick={() => navigate(`/product/${product._id}`)}
+                  className="w-full bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition"
+                >
+                  Details
+                </button>
+                <button
+                  onClick={() => deleteProduct(product._id)}
+                  className="w-full bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="flex justify-center items-center mt-8 gap-2">
