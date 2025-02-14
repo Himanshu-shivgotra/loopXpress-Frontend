@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@types/react-color": "^3.0.13",
-    "apexcharts": "^3.41.0",
+    "apexcharts": "^4.4.0",
     "axios": "^1.7.7",
     "color-2-name": "^1.4.4",
     "color-convert": "^2.0.1",
