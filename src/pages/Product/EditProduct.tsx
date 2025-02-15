@@ -9,6 +9,7 @@ import { ChromePicker } from 'react-color';
 import { colornames } from 'color-name-list';
 import nearestColor from 'nearest-color';
 import { FaTimes } from 'react-icons/fa';
+import Loader from '../../common/Loader';
 
 const EditProduct: React.FC = () => {
   const { id } = useParams();
@@ -253,7 +254,7 @@ const EditProduct: React.FC = () => {
   };
 
   if (!product) {
-    return <div>Loading...</div>;
+    return (<Loader/>);
   }
 
   return (
