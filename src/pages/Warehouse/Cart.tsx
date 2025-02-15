@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../common/axiosInstance';
 import { FaTrash, FaPlus, FaMinus } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 interface CartItem {
     _id: string;
@@ -19,12 +20,13 @@ interface CartItem {
 }
 
 const Cart = () => {
+    const navigate = useNavigate();
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
-
+console.log(cartItems)
     useEffect(() => {
         const fetchCart = async () => {
             try {
-                const response = await axiosInstance.get('/api/inventory/cart');
+                const response = await axiosInstance.get('/api/inventory/get-cart');
                 setCartItems(response.data.items);
             } catch (error) {
                 console.error('Error fetching cart:', error);
@@ -76,10 +78,10 @@ const Cart = () => {
         }, 0);
     };
 
-    const handleCheckout = () => {
-        // Redirect to checkout page
-        window.location.href = '/checkout';
-    };
+    const handleCheckout = async () => {
+        navigate('/checkout', { state: { cartItems } });
+    }
+
 
     return (
         <div className="container mx-auto p-4 md:p-8 bg-gray-100 dark:bg-gray-900 min-h-screen">

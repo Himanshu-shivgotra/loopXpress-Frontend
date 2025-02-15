@@ -16,6 +16,7 @@ interface Product {
     originalPrice: number;
     discountedPrice: number;
     category: string;
+    subcategory: string;
     quantity: number;
     imageUrls: string[];
   };
