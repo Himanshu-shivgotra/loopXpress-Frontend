@@ -6,8 +6,8 @@ import Loader from './common/Loader';
 import SignIn from './pages/Authentication/SignIn';
 import SignUp from './pages/Authentication/SignUp';
 import ECommerce from './pages/Dashboard/ECommerce';
-import Profile from './pages/Profile';
-import Settings from './pages/Settings';
+import Profile from './pages/Profile/Profile';
+import Settings from './pages/Profile/Settings';
 import DefaultLayout from './layout/DefaultLayout';
 import ProtectedRoute from './common/protectedRoutes';
 import AddNewProduct from './pages/Product/AddNewProduct';
@@ -21,8 +21,11 @@ import EditProduct from './pages/Product/EditProduct';
 import ForgotPassword from './pages/Authentication/ForgetPassword';
 import ResetPassword from './pages/Authentication/ResetPassword';
 import Payouts from './pages/Payouts/Payouts';
-import Inventory from './pages/Warehouse/Inventory';
+// import Inventory from './pages/Warehouse/Inventory';
 import SellerList from './pages/SellerList/SellerList';
+import ProductCard from './pages/Warehouse/ProductCard';
+import Inventory from './pages/Warehouse/Inventory';
+import Cart from './pages/Warehouse/Cart';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -118,7 +121,6 @@ function App() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/payouts" element={<Payouts />} />
           <Route path="/add-new-product" element={<AddNewProduct onProductAdded={() => {
-            // Optionally navigate to product list after adding
             navigate('/product-list');
           }} />} />
           <Route path="/product-list" element={<ProductList />} />
@@ -129,7 +131,8 @@ function App() {
           <Route path="/seller/edit-product/:id" element={<EditProduct />} />
           <Route path="/seller/product-list" element={<ProductList />} />
           <Route path="/seller/product/:id" element={<ProductDetails />} />
-          {/* <Route path='/inventory' element={<Inventory/>} /> */}
+          <Route path='/inventory' element={<Inventory/>} />
+          <Route path='/inventory/cart' element={<Cart/>} />
           <Route path='/sellers-list' element={<SellerList/>} />
           
         </Route>

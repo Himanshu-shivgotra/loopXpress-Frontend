@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
-import PersonalSettings from './AccountSetting/PersonalSettings';
+import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
+import PersonalSettings from '../AccountSetting/PersonalSettings';
 // import BusinessSettings from './AccountSetting/BusinessSettings';
 
 const Settings: React.FC = () => {

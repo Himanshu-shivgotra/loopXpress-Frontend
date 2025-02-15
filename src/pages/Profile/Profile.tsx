@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
-import useUserInfo from '../hooks/useUserInfo';
-import axiosInstance from '../common/axiosInstance';
+import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
+import useUserInfo from '../../hooks/useUserInfo';
+import axiosInstance from '../../common/axiosInstance';
+import Loader from '../../common/Loader';
 
 const Profile = () => {
   const { userInfo, loading, error } = useUserInfo();
@@ -34,7 +35,9 @@ const Profile = () => {
   }, [userInfo, role]);
   
   if (loading) {
-    return <div className="text-center mt-10 text-lg font-semibold">Loading...</div>;
+    return (
+      <Loader/>
+    );
   }
 
   if (error) {

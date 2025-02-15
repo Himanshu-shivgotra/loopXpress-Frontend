@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import useUserInfo from "../../hooks/useUserInfo";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from "react-toastify";
+import Loader from "../../common/Loader";
 
 const BusinessSettings = () => {
   const { userInfo, loading, error, updateBusinessInfo } = useUserInfo();
@@ -50,7 +51,9 @@ const BusinessSettings = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return(
+      <Loader/>
+    );
   }
 
   if (error) {

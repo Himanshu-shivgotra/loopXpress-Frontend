@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../common/axiosInstance";
 import { FaPhoneAlt } from "react-icons/fa";
+import Loader from "../../common/Loader";
 
 interface Seller {
   _id: string;
@@ -39,11 +40,7 @@ export default function SellerList() {
   }, []);
 
   if (loading)
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
-      </div>
-    );
+    return (<Loader/>);
 
   if (error)
     return (

@@ -42,6 +42,7 @@ const Header = (props: {
             console.error('Unauthorized, redirecting to login');
             localStorage.removeItem('authToken');
             localStorage.removeItem('role');
+            localStorage.removeItem('isWarehouseInventory')
             navigate('/auth/signin');
           } else {
             console.error('Failed to fetch user data:', response.statusText);
@@ -60,6 +61,7 @@ const Header = (props: {
   const handleLogout = () => {
     localStorage.removeItem('authToken'); // Clear the token
     localStorage.removeItem('role');
+    localStorage.removeItem('isWarehouseInventory')
     navigate("/auth/signin");
   };
 

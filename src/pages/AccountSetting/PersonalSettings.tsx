@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../common/axiosInstance";
+import Loader from "../../common/Loader";
 
 // PasswordUpdate Component
 const PasswordUpdate = () => {
@@ -191,7 +192,7 @@ const PersonalSettings = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return (<Loader/>);
   if (error) return <div>Error: {error.message}</div>;
 
   return (

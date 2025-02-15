@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import axiosInstance from '../../common/axiosInstance';
+import Loader from '../../common/Loader';
+import { FaShoppingCart } from 'react-icons/fa';
 
 interface Product {
   _id: string;
@@ -35,13 +37,17 @@ const ProductDetails = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [images, setImages] = useState<string[]>([]);
+  const [isWarehouseInventory, setIsWarehouseInventory] = useState(false);
 
   useEffect(() => {
+    const warehouseStatus = localStorage.getItem('isWarehouseInventory') === 'true';
+    setIsWarehouseInventory(warehouseStatus);
     const fetchProduct = async () => {
       try {
         const response = await axiosInstance.get(`/api/products/product/${id}`);
 
         const data = await response.data;
+        console.log(data)
         setProduct(data);
 
         // Combine image URLs and Base64 images into a single array for display
@@ -56,7 +62,7 @@ const ProductDetails = () => {
   }, [id]);
 
   if (!product) {
-    return <div>Loading...</div>;
+    return (<Loader/>);
   }
 
   const nextImage = () => {
@@ -210,38 +216,52 @@ const ProductDetails = () => {
                 <p className="text-sm text-green-600 dark:text-green-400">In Stock</p>
                 <p className="font-bold text-green-700 dark:text-green-300">{product.quantity}</p>
               </div>
-              <div className="bg-blue-50 bg-blue-900/30 p-3 rounded-lg text-center">
-                <p className="text-sm text-blue-600 ">Stock Alert</p>
-                <p className="font-bold text-blue-700 dark:text-blue-300">{String(product.stockAlert || 0)}</p>
-              </div>
-              <div className="bg-purple-300 dark:bg-purple-900/30 p-3 rounded-lg text-center">
-                <p className="text-sm text-purple-600 dark:text-purple-400">Total Sales</p>
-                <p className="font-bold text-purple-700 dark:text-purple-300">{String(product.salesCount || 0)}</p>
-              </div>
+              {!isWarehouseInventory && (
+                <>
+                  <div className="bg-blue-50 bg-blue-900/30 p-3 rounded-lg text-center">
+                    <p className="text-sm text-blue-600">Stock Alert</p>
+                    <p className="font-bold text-blue-700 dark:text-blue-300">{String(product.stockAlert || 0)}</p>
+                  </div>
+                  <div className="bg-purple-300 dark:bg-purple-900/30 p-3 rounded-lg text-center">
+                    <p className="text-sm text-purple-600 dark:text-purple-400">Total Sales</p>
+                    <p className="font-bold text-purple-700 dark:text-purple-300">{String(product.salesCount || 0)}</p>
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="flex gap-4">
-              <button
-                onClick={() => navigate(`/seller/edit-product/${product._id}`)}
-                className="flex-1 bg-[#dc651d] text-white px-6 py-3 rounded-md hover:bg-opacity-90 transition-colors flex items-center justify-center gap-2"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              {isWarehouseInventory ? (
+                <button
+                  onClick={() => console.log('Add to cart')}
+                  className="flex-1 bg-[#dc651d] text-white px-6 py-3 rounded-md hover:bg-opacity-90 transition-colors flex items-center justify-center gap-2"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                  />
-                </svg>
-                Edit Product
-              </button>
+                 {<FaShoppingCart/>}
+                  Add to Cart
+                </button>
+              ) : (
+                <button
+                  onClick={() => navigate(`/seller/edit-product/${product._id}`)}
+                  className="flex-1 bg-[#dc651d] text-white px-6 py-3 rounded-md hover:bg-opacity-90 transition-colors flex items-center justify-center gap-2"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
+                  Edit Product
+                </button>
+              )}
               <button
-                onClick={() => navigate('/seller/product-list')}
+                onClick={() => {isWarehouseInventory ? navigate('/inventory') : navigate('/seller/product-list')  }}
                 className="flex-1 bg-[#24303f] dark:bg-gray-200 text-white dark:text-black px-6 py-3 rounded-md hover:bg-opacity-90 transition-colors flex items-center justify-center gap-2"
               >
                 <svg
