@@ -15,6 +15,7 @@ interface Product {
       originalPrice: number;
       discountedPrice: number;
       category: string;
+      subcategory: string;
       quantity: number;
       imageUrls: string[];
     };
@@ -22,20 +23,18 @@ interface Product {
 interface Props {
   ProductData: Product;
 }
-
 const ProductCard = ({ ProductData }: Props) => {
-  const navigate = useNavigate();
-  const handleCardClick = () => {
-    navigate(`/product/${ProductData?.product?._id}`);
-   
-  };
+    const navigate = useNavigate();
+    const handleCardClick = () => {
+        navigate(`/product/${ProductData?.product?._id}`);
+    };
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation();
     try {
       const authToken = localStorage.getItem('authToken');
        await axiosInstance.post(
-        '/api/inventory/cart',
+        '/api/inventory/add-to-cart',
         {
           productId: ProductData.product._id,
           quantity: 1,

@@ -26,6 +26,7 @@ import SellerList from './pages/SellerList/SellerList';
 import ProductCard from './pages/Warehouse/ProductCard';
 import Inventory from './pages/Warehouse/Inventory';
 import Cart from './pages/Warehouse/Cart';
+import Checkout from './pages/Warehouse/Checkout';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -133,6 +134,7 @@ function App() {
           <Route path="/seller/product/:id" element={<ProductDetails />} />
           <Route path='/inventory' element={<Inventory/>} />
           <Route path='/inventory/cart' element={<Cart/>} />
+          <Route path='/checkout' element={<Checkout/>} />
           <Route path='/sellers-list' element={<SellerList/>} />
           
         </Route>
