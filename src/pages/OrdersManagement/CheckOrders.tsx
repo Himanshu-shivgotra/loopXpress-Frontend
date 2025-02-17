@@ -32,9 +32,9 @@ const CheckOrders = () => {
     // Filter orders based on search term and approval status
     const filteredOrders = orders.filter(order => 
         order.approvalStatus === 'Approved' &&
-        (order.razorpay_order_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.brand.toLowerCase().includes(searchTerm.toLowerCase()))
+        (order.razorpay_order_id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.brand?.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     if (loading) return (
@@ -74,7 +74,7 @@ const CheckOrders = () => {
                     <tbody className="text-gray-700">
                         {filteredOrders.map((order) => (
                             <tr key={order.razorpay_order_id} className="border-b hover:bg-gray-50">
-                                <td className="px-4 py-3">{order.razorpay_order_id}</td>
+                                <td className="px-4 py-3">{order.razorpay_order_id || "Not available"}</td>
                                 <td className="px-4 py-3">{order.title}</td>
                                 <td className="px-4 py-3">{order.brand}</td>
                                 <td className="px-4 py-3">{order.category}</td>

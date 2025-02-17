@@ -31,13 +31,13 @@ const Checkout = () => {
 
     // Calculate totals based on cart items
     const totalPrice = cartItems.reduce((total, item) => {
-        const price = item.product.discountedPrice || item.product.price;
+        const price = item.product.discountedPrice
         return total + price * item.quantity;
     }, 0);
 
     const shippingFee = 0;
     const totalAmount = totalPrice + shippingFee;
-
+    console.log(totalPrice)
     useEffect(() => {
         if (location.state?.cartItems) {
             setCartItems(location.state.cartItems);
@@ -76,95 +76,32 @@ const Checkout = () => {
         }
     }, [userInfo?.businessDetails?.gstNumber]);
 
-    const handlePayment = async () => {
+    const handleOrderRequest = async () => {
         try {
-            const orderResponse = await axiosInstance.post("/api/payment/checkout", {
-                amount: totalAmount,
+            const productData = cartItems.map(item => ({
+                title: item.product?.title,
+                brand: item.product?.brand,
+                category: item.product.category,
+                discountedPrice: item.product.discountedPrice,
+                subcategory: item.product.subcategory 
+            }));
+
+            // Calculate total discounted price
+            const totalDiscountedPrice = cartItems.reduce((total, item) => {
+                return total + (item.product.discountedPrice * item.quantity);
+            }, 0);
+
+            // Create order request with discounted price
+            const response = await axiosInstance.post("/api/payment/createOrderRequest", {
+                amount: totalDiscountedPrice, 
+                items: productData
             });
 
-            const { order } = orderResponse.data;
-            if (!order) {
-                console.error("Order creation failed.");
-                return;
-            }
-
-            // Load Razorpay script dynamically
-            const script = document.createElement('script');
-            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-            script.async = true;
-            script.onload = async () => {
-                const key = await fetchRazorPayKey();
-                const productData = cartItems.map(item => ({
-                    title: item.product?.title,
-                    brand: item.product?.brand,
-                    category: item.product.category,
-                    discountedPrice: item.product.discountedPrice,
-                    subcategory: item.product.subcategory 
-                }));
-
-                const options = {
-                    key,
-                    amount: order.amount,
-                    currency: "INR",
-                    order_id: order.id,
-                    name: "Loopxpress",
-                    description: "Order Payment",
-                    image: "https://loop-xpress-eller-frontend.vercel.app/assets/Adrenal_Go_logo-e621edde.png",
-                    handler: async (response) => {
-                        const paymentData = {
-                            razorpay_order_id: response.razorpay_order_id,
-                            razorpay_payment_id: response.razorpay_payment_id,
-                            razorpay_signature: response.razorpay_signature,
-                            amount: order.amount / 100,
-                            currency: "INR",
-                            items: productData
-                        };
-
-                        try {
-                            const paymentResponse = await axiosInstance.post(
-                                "/api/payment/paymentverification",
-                                paymentData
-                            );
-
-                            if (paymentResponse.data.success) {
-                                // Clear the cart after successful payment
-                                await axiosInstance.delete('/api/inventory/clear-cart');
-                                
-                                toast.success("Payment successful! Redirecting...");
-                                setTimeout(() => {
-                                    navigate('/inventory')
-                                }, 1000);
-                            } else {
-                                toast.error("Payment verification failed");
-                            }
-                        } catch (verificationError) {
-                            console.error("Verification error:", verificationError);
-                            toast.error("Payment verification error");
-                        }
-                    },
-                    prefill: {
-                        name: userInfo?.businessDetails?.businessName,
-                        email: userInfo?.personalDetails?.email || '',
-                        contact: userInfo?.businessDetails?.businessPhone
-                    },
-                    notes: {
-                        address: `${gstDetails?.address}`,
-                    },
-                    theme: {
-                        color: "#FF5722"
-                    }
-                };
-
-                const razorpay = new (window as any).Razorpay(options);
-                razorpay.on('payment.failed', function (response: any) {
-                    toast.error(`Payment failed: ${response.error.description}`);
-                });
-                razorpay.open();
-            };
-            document.body.appendChild(script);
+            toast.success("Order request submitted successfully!");
+            navigate('/orders');
         } catch (error) {
-            console.error("Error during checkout:", error);
-            toast.error("Error during checkout process");
+            console.error("Error submitting order request:", error);
+            toast.error("Error submitting order request");
         }
     };
 
@@ -225,9 +162,9 @@ const Checkout = () => {
                 {/* Place Order Button */}
                 <button
                     className="w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600 transition-colors"
-                    onClick={handlePayment}
+                    onClick={handleOrderRequest}
                 >
-                    Place Order
+                    Submit Order Request
                 </button>
             </div>
         </div>

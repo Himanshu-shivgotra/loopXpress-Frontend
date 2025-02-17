@@ -21,15 +21,14 @@ import EditProduct from './pages/Product/EditProduct';
 import ForgotPassword from './pages/Authentication/ForgetPassword';
 import ResetPassword from './pages/Authentication/ResetPassword';
 import Payouts from './pages/Payouts/Payouts';
-// import Inventory from './pages/Warehouse/Inventory';
 import SellerList from './pages/SellerList/SellerList';
-import ProductCard from './pages/Warehouse/ProductCard';
 import Inventory from './pages/Warehouse/Inventory';
 import Cart from './pages/Warehouse/Cart';
 import Checkout from './pages/Warehouse/Checkout';
 import CheckOrders from './pages/OrdersManagement/CheckOrders';
 import OrderRequests from './pages/OrdersManagement/OrderRequests';
 import ApprovedOrders from './pages/OrdersManagement/ApprovedOrders';
+import Payment from './pages/Payment/Payment';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -143,6 +142,7 @@ function App() {
           <Route path='/order-status' element={<OrderStatus />} />
           <Route path='/order-request' element={<OrderRequests />} />
           <Route path='/approved-orders' element={<ApprovedOrders />} />
+          <Route path='/payment/:orderId' element={<Payment />} />
         </Route>
 
 
