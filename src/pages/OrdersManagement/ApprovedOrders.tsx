@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import Loader from '../../common/Loader';
 import { FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 export interface Order {
     _id: string;
@@ -42,16 +43,41 @@ const ApprovedOrders = () => {
         fetchApprovedOrders();
     }, []);
 
-    const handleMakePayment = (orderId: string) => {
-        navigate(`/payment/${orderId}`);
+    const handleMakePayment = async (orderId: string) => {
+        try {
+            // Verify the order is approved
+            const response = await axiosInstance.get(`/api/payment/order/${orderId}`);
+            const order = response.data.order;
+            
+            if (order.approvalStatus !== 'Approved') {
+                toast.error("Order is not approved for payment");
+                return;
+            }
+
+            // Navigate to payment page with existing order data
+            navigate(`/payment/${orderId}`, {
+                state: {
+                    orderData: order // Pass the existing order
+                }
+            });
+        } catch (error) {
+            console.error("Error verifying order:", error);
+            toast.error("Failed to process payment");
+        }
     };
 
-    const filteredOrders = orders.filter(order => 
-        order.approvalStatus === 'Approved' &&
-        (order.razorpay_order_id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.brand.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
+    const filteredOrders = orders
+        .filter(order => 
+            order.approvalStatus === 'Approved' &&
+            (order.razorpay_order_id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            order.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            order.brand?.toLowerCase().includes(searchTerm.toLowerCase()))
+        )
+        .sort((a, b) => {
+            const dateA = new Date(a.createdAt || 0).getTime();
+            const dateB = new Date(b.createdAt || 0).getTime();
+            return dateB - dateA; // Descending order (newest first)
+        });
 
     if (loading) return <Loader />;
 
