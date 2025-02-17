@@ -22,7 +22,6 @@ interface CartItem {
 const Cart = () => {
     const navigate = useNavigate();
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
-console.log(cartItems)
     useEffect(() => {
         const fetchCart = async () => {
             try {
