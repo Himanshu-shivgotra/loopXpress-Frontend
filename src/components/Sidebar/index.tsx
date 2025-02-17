@@ -215,7 +215,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                           <li>
                             <NavLink
-                              to="/view-orders"
+                              to={role === "seller" ? "/view-orders" : "/check-orders"}
                               className={({ isActive }) =>
                                 'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
                                 (isActive && '!text-white')
@@ -235,6 +235,20 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               Update Order Status
                             </NavLink>
                           </li>
+                          {role === 'admin' && (
+                             <li>
+                             <NavLink
+                               to="/order-request"
+                               className={({ isActive }) =>
+                                 'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                 (isActive && '!text-white')
+                               }
+                             >
+                               Orders Requests
+                             </NavLink>
+                           </li>
+                          )}
+                         
                           <li>
                             <NavLink
                               to="/return-or-refund"
@@ -374,6 +388,19 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </li>
               {/* <!-- Menu Item Payouts --> */}
 
+              {role === 'seller' && (
+                <li>
+                  <NavLink
+                    to="/approved-orders"
+                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${pathname === '/approved-orders' &&
+                      'bg-graydark dark:bg-meta-4'
+                    }`}
+                  >
+                    <FaBoxOpen />
+                    Approved Orders
+                  </NavLink>
+                </li>
+              )}
 
             </ul>
           </div>

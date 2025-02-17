@@ -27,12 +27,15 @@ import ProductCard from './pages/Warehouse/ProductCard';
 import Inventory from './pages/Warehouse/Inventory';
 import Cart from './pages/Warehouse/Cart';
 import Checkout from './pages/Warehouse/Checkout';
+import CheckOrders from './pages/OrdersManagement/CheckOrders';
+import OrderRequests from './pages/OrdersManagement/OrderRequests';
+import ApprovedOrders from './pages/OrdersManagement/ApprovedOrders';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const { pathname } = useLocation();
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -72,6 +75,7 @@ function App() {
     }
     setLoading(false);
   }, [pathname, navigate]);
+
 
   if (loading) {
     return <Loader />;
@@ -126,7 +130,6 @@ function App() {
           }} />} />
           <Route path="/product-list" element={<ProductList />} />
           <Route path="/view-orders" element={<ViewOrders />} />
-          <Route path="/order-status" element={<OrderStatus />} />
           <Route path="/return-or-refund" element={<ReturnAndRefund />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/seller/edit-product/:id" element={<EditProduct />} />
@@ -136,7 +139,10 @@ function App() {
           <Route path='/inventory/cart' element={<Cart/>} />
           <Route path='/checkout' element={<Checkout/>} />
           <Route path='/sellers-list' element={<SellerList/>} />
-          
+          <Route path='/check-orders' element={<CheckOrders/>} />
+          <Route path='/order-status' element={<OrderStatus />} />
+          <Route path='/order-request' element={<OrderRequests />} />
+          <Route path='/approved-orders' element={<ApprovedOrders />} />
         </Route>
 
 

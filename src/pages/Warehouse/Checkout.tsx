@@ -98,6 +98,7 @@ const Checkout = () => {
                     title: item.product?.title,
                     brand: item.product?.brand,
                     category: item.product.category,
+                    discountedPrice: item.product.discountedPrice,
                     subcategory: item.product.subcategory 
                 }));
 
