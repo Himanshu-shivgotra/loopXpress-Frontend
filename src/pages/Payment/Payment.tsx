@@ -53,24 +53,21 @@ const Payment = () => {
     
 
     const handlePayment = async () => {
-        
         try {
-            // Add validation for order existence
             if (!order) {
                 toast.error("Order details not found");
                 return;
             }
 
-            const amount =(order.amount * 100);
+            const amount = (order.amount * 100);
+            const key = await fetchRazorpayKey();
+
+            // Create Razorpay order first
             const { data } = await axiosInstance.post('/api/payment/checkout', {
                 orderId: order._id,
                 amount: amount
             });
 
-            // Add debug logging for Razorpay response
-            console.log("Razorpay response:", data);
-
-            const key = await fetchRazorpayKey();
             const options = {
                 key,
                 amount: amount,
@@ -78,20 +75,25 @@ const Payment = () => {
                 name: "Loop Xpress International",
                 description: "Order Payment",
                 image:"https://loop-xpress-eller-frontend.vercel.app/assets/Adrenal_Go_logo-e621edde.png",
-                order_id: data.order.id,
+                order_id: data.order.id, // Use the generated order ID
                 handler: async function (response) {
                     try {
-                        await axiosInstance.post('/api/payment/paymentVerification', {
-                            ...response,
+                        // Verify payment with all required fields
+                        const verificationResponse = await axiosInstance.post('/api/payment/paymentVerification', {
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_signature: response.razorpay_signature,
                             orderId: order._id,
                             amount: amount
                         });
 
-                        // Clear the cart after successful payment
-                        await axiosInstance.delete('/api/inventory/clear-cart');
-                        
-                        toast.success("Payment successful!");
-                        navigate('/inventory');
+                        if (verificationResponse.data.success) {
+                            await axiosInstance.delete('/api/inventory/clear-cart');
+                            toast.success("Payment successful!");
+                            navigate('/inventory');
+                        } else {
+                            throw new Error("Payment verification failed");
+                        }
                     } catch (error) {
                         console.error("Payment verification error:", error);
                         toast.error("Payment verification failed");
@@ -113,7 +115,6 @@ const Payment = () => {
                 }
             };
 
-            // Check if Razorpay is loaded
             if (!window.Razorpay) {
                 throw new Error("Razorpay script not loaded");
             }
@@ -134,14 +135,48 @@ const Payment = () => {
             <div className="bg-white p-6 rounded-lg shadow-md">
                 <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
                 {order && (
-                    <div className="space-y-2">
-                        <p>Order ID: {order._id}</p>
-                        <p>Amount: ₹{order.amount}</p>
+                    <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <p className="font-medium">Order ID:</p>
+                                <p>{order._id}</p>
+                            </div>
+                            <div>
+                                <p className="font-medium">Title:</p>
+                                <p>{order.title}</p>
+                            </div>
+                            <div>
+                                <p className="font-medium">Amount:</p>
+                                <p>₹{order.amount}</p>
+                            </div>
+                            <div>
+                                <p className="font-medium">Status:</p>
+                                <p className={`capitalize ${order.status === 'pending' ? 'text-orange-500' : 'text-green-500'}`}>
+                                    {order.status}
+                                </p>
+                            </div>
+                        </div>
+                        {order.items && (
+                            <div className="mt-4">
+                                <h3 className="font-medium mb-2">Items:</h3>
+                                <div className="space-y-2">
+                                    {order.items.map((item, index) => (
+                                        <div key={index} className="flex justify-between border-b pb-2">
+                                            <div>
+                                                <p>{item.name}</p>
+                                                <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
+                                            </div>
+                                            <p>₹{item.price * item.quantity}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
                 <button
                     onClick={handlePayment}
-                    className="mt-6 bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-md"
+                    className="mt-6 w-full bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md font-medium"
                 >
                     Proceed to Payment
                 </button>
