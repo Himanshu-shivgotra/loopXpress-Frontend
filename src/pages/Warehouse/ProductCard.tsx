@@ -58,10 +58,6 @@ const ProductCard = ({ ProductData }: Props) => {
     }
   };
 
-  const handleBuyNow = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    navigate(`/checkout?productId=${ProductData._id}&quantity=1`);
-  };
 
   return (
     <div

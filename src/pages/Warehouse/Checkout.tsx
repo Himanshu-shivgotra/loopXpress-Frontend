@@ -4,6 +4,7 @@ import { FaMapMarkerAlt } from 'react-icons/fa';
 import axiosInstance from '../../common/axiosInstance';
 import { useLocation, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import Address from '../../components/Address/Address';
 
 interface CartItem {
     _id: string;
@@ -27,7 +28,7 @@ const Checkout = () => {
     const [isVerifyingGst, setIsVerifyingGst] = useState(false);
     const location = useLocation();
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
-
+    const [manualAddress, setManualAddress] = useState('');
 
     // Calculate totals based on cart items
     const totalPrice = cartItems.reduce((total, item) => {
@@ -37,7 +38,6 @@ const Checkout = () => {
 
     const shippingFee = 0;
     const totalAmount = totalPrice + shippingFee;
-    console.log(totalPrice)
     useEffect(() => {
         if (location.state?.cartItems) {
             setCartItems(location.state.cartItems);
@@ -78,30 +78,40 @@ const Checkout = () => {
 
     const handleOrderRequest = async () => {
         try {
+            if (!manualAddress && !gstDetails?.address) {
+                toast.error("Please provide a delivery address");
+                return;
+            }
+
             const productData = cartItems.map(item => ({
-                title: item.product?.title,
-                brand: item.product?.brand,
+                productId: item.product._id,
+                quantity: item.quantity,
+                price: item.product.discountedPrice,
+                brand: item.product.brand,
                 category: item.product.category,
-                discountedPrice: item.product.discountedPrice,
-                subcategory: item.product.subcategory 
+                subcategory: item.product.subcategory,
+                title: item.product.title
             }));
 
-            // Calculate total discounted price
             const totalDiscountedPrice = cartItems.reduce((total, item) => {
                 return total + (item.product.discountedPrice * item.quantity);
             }, 0);
 
-            // Create order request with discounted price
             const response = await axiosInstance.post("/api/payment/createOrderRequest", {
-                amount: totalDiscountedPrice, 
-                items: productData
+                amount: totalDiscountedPrice,
+                items: productData,
+                address: gstDetails?.address || manualAddress
             });
 
-            toast.success("Order request submitted successfully!");
-            navigate('/orders');
-        } catch (error) {
+            if (response.data.success) {
+                toast.success("Order request submitted successfully!");
+                navigate('/orders');
+            } else {
+                toast.error(response.data.message || "Failed to submit order");
+            }
+        } catch (error: any) {
             console.error("Error submitting order request:", error);
-            toast.error("Error submitting order request");
+            toast.error(error.response?.data?.message || "Error submitting order request");
         }
     };
 
@@ -109,35 +119,15 @@ const Checkout = () => {
         <div className="container mx-auto p-4 md:p-8 bg-gray-100 dark:bg-gray-900 min-h-screen">
             <h1 className="text-3xl font-bold text-orange-500 mb-6">Checkout</h1>
 
-            {/* Delivery Address Section */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm mb-8">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                    <FaMapMarkerAlt className="mr-2 text-orange-500" />
-                    Delivery Address
-                </h2>
-                {loading ? (
-                    <div className="animate-pulse">
-                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-2"></div>
-                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
-                    </div>
-                ) : error ? (
-                    <p className="text-red-500">{error.message}</p>
-                ) : (
-                    <div className="text-gray-700 dark:text-gray-300">
-                        <p className="font-semibold">{userInfo?.businessDetails.businessName}</p>
-                        <p>Phone: {userInfo?.businessDetails.businessPhone}</p>
-                        {gstDetails && (
-                            <p><strong>Address:</strong> {gstDetails.address || "Adress not found"}</p>
-                        )}
-                    </div>
-                )}
-                <button
-                    className="mt-4 text-orange-500 hover:text-orange-600 underline"
-                    onClick={() => {/* Open address edit modal */ }}
-                >
-                    Edit Address
-                </button>
-            </div>
+            {/* Address Section */}
+            {gstDetails?.address ? (
+                <Address 
+                    initialAddress={gstDetails.address}
+                    onSave={setManualAddress}
+                />
+            ) : (
+                <Address onSave={setManualAddress} />
+            )}
 
             {/* Payment Section */}
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">

@@ -133,7 +133,6 @@ function App() {
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/seller/edit-product/:id" element={<EditProduct />} />
           <Route path="/seller/product-list" element={<ProductList />} />
-          <Route path="/seller/product/:id" element={<ProductDetails />} />
           <Route path='/inventory' element={<Inventory/>} />
           <Route path='/inventory/cart' element={<Cart/>} />
           <Route path='/checkout' element={<Checkout/>} />

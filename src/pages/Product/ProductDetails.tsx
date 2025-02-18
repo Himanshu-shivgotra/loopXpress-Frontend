@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import axiosInstance from '../../common/axiosInstance';
 import Loader from '../../common/Loader';
 import { FaShoppingCart } from 'react-icons/fa';
+import toast from 'react-hot-toast';
 
 interface Product {
   _id: string;
@@ -38,6 +39,7 @@ const ProductDetails = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [images, setImages] = useState<string[]>([]);
   const [isWarehouseInventory, setIsWarehouseInventory] = useState(false);
+  const [isAddedToCart, setIsAddedToCart] = useState(false);
 
   useEffect(() => {
     const warehouseStatus = localStorage.getItem('isWarehouseInventory') === 'true';
@@ -45,9 +47,7 @@ const ProductDetails = () => {
     const fetchProduct = async () => {
       try {
         const response = await axiosInstance.get(`/api/products/product/${id}`);
-
         const data = await response.data;
-        console.log(data)
         setProduct(data);
 
         // Combine image URLs and Base64 images into a single array for display
@@ -75,6 +75,35 @@ const ProductDetails = () => {
 
   const selectImage = (index: number) => {
     setCurrentImageIndex(index);
+  };
+
+  const handleAddToCart = async () => {
+    try {
+      const authToken = localStorage.getItem('authToken');
+      await axiosInstance.post(
+        '/api/inventory/add-to-cart',
+        {
+          productId: product?._id,
+          quantity: 1,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+        }
+      );
+      toast.success('Product added to cart successfully!');
+      setIsAddedToCart(true);
+      
+      // Refresh cart count in parent component
+      if (window.parent) {
+        window.parent.postMessage('refreshCartCount', '*');
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      toast.error('Failed to add product to cart');
+    }
   };
 
   return (
@@ -232,13 +261,23 @@ const ProductDetails = () => {
 
             <div className="flex gap-4">
               {isWarehouseInventory ? (
-                <button
-                  onClick={() => console.log('Add to cart')}
-                  className="flex-1 bg-[#dc651d] text-white px-6 py-3 rounded-md hover:bg-opacity-90 transition-colors flex items-center justify-center gap-2"
-                >
-                 {<FaShoppingCart/>}
-                  Add to Cart
-                </button>
+                isAddedToCart ? (
+                  <Link
+                    to="/inventory/cart"
+                    className="flex-1 bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <FaShoppingCart/>
+                    Go to Cart
+                  </Link>
+                ) : (
+                  <button
+                    onClick={handleAddToCart}
+                    className="flex-1 bg-[#dc651d] text-white px-6 py-3 rounded-md hover:bg-opacity-90 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <FaShoppingCart/>
+                    Add to Cart
+                  </button>
+                )
               ) : (
                 <button
                   onClick={() => navigate(`/seller/edit-product/${product._id}`)}
