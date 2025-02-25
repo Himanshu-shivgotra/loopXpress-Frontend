@@ -27,6 +27,7 @@
     "jsvectormap": "^1.5.3",
     "match-sorter": "^6.3.1",
     "nearest-color": "^0.4.4",
+    "openai": "^4.85.4",
     "razorpay": "^2.9.5",
     "react": "^18.2.0",
     "react-apexcharts": "^1.7.0",

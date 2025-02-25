@@ -20,6 +20,16 @@ interface ColorInput {
   hex: string;
 }
 
+interface GeminiResponse {
+  candidates: {
+    content: {
+      parts: {
+        text: string;
+      }[];
+    };
+  }[];
+}
+
 const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
 
   const { adminInfo } = useAdminInfo(); 
@@ -52,6 +62,7 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [colorInputs, setColorInputs] = useState<ColorInput[]>([{ name: '', hex: '' }]);
   const [showColorPicker, setShowColorPicker] = useState<number | null>(null);
+  const [isGeneratingDescription, setIsGeneratingDescription] = useState(false);
 
   // Create the color mapping object and nearest color finder
   const colors = colornames.reduce((o, { name, hex }) => Object.assign(o, { [name]: hex }), {});
@@ -308,6 +319,32 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
         </select>
       </div>
     );
+  };
+
+  const generateDescriptionPoints = async (title: string) => {
+    try {
+      setIsGeneratingDescription(true);
+      if (!title || typeof title !== 'string' || title.trim() === '') {
+        toast.error('Please enter a valid product title');
+        return [];
+      }
+
+      const response = await axiosInstance.post('/api/products/generate-description', {
+        title: title.trim()
+      });
+
+      if (!response.data.points || !Array.isArray(response.data.points)) {
+        throw new Error('Invalid response format');
+      }
+
+      return response.data.points;
+    } catch (error) {
+      console.error('Error generating description points:', error);
+      toast.error('Failed to generate description points');
+      return [];
+    } finally {
+      setIsGeneratingDescription(false);
+    }
   };
 
   return (
@@ -632,6 +669,20 @@ const AddNewProduct = ({ onProductAdded }: AddNewProductProps) => {
                     className="w-full rounded border-[1.5px] border-gray-300 bg-white text-black dark:border-[#dc651d] dark:bg-[#24303f] dark:text-white py-3 px-5 outline-none transition focus:border-[#dc651d]"
                     required
                   />
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const points = await generateDescriptionPoints(productData.title);
+                      setProductData({
+                        ...productData,
+                        description: points.join('\n')
+                      });
+                    }}
+                    className="mt-2 px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600"
+                    disabled={!productData.title || isGeneratingDescription}
+                  >
+                    {isGeneratingDescription ? 'Generating...' : 'Generate Description Points'}
+                  </button>
                 </div>
 
                 <div>

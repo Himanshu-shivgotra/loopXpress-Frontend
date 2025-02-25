@@ -49,7 +49,6 @@ const ProductDetails = () => {
         const response = await axiosInstance.get(`/api/products/product/${id}`);
         const data = await response.data;
         setProduct(data);
-
         // Combine image URLs and Base64 images into a single array for display
         const combinedImages = [...(data.imageUrls || []), ...(data.base64Images || [])];
         setImages(combinedImages);
@@ -228,7 +227,7 @@ const ProductDetails = () => {
               <ul className="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-400 break-words">
                 {Array.isArray(product.highlights) ?
                   product.highlights.map((highlight, index) => (
-                    <li key={index} className="px-2">{String(highlight)}</li>
+                    <li key={index} className="px-2">{highlight.toString().replace(/["\[\]]/g, '')}</li>
                   ))
                   : null
                 }
@@ -237,7 +236,13 @@ const ProductDetails = () => {
 
             <div className="mb-6 overflow-hidden">
               <h2 className="text-lg font-semibold mb-3 dark:text-white">Product Description</h2>
-              <p className="text-gray-600 dark:text-gray-400 break-words px-2">{product.description}</p>
+              <div className="text-gray-600 dark:text-gray-400 break-words px-2">
+                {product.description.split('\n').map((line, index) => (
+                  <p key={index} className="mb-2">
+                    {line}
+                  </p>
+                ))}
+              </div>
             </div>
 
             <div className="mb-6 grid grid-cols-3 gap-4">

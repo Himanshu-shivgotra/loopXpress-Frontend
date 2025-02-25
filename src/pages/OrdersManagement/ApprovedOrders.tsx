@@ -57,7 +57,7 @@ const ApprovedOrders = () => {
             // Navigate to payment page with existing order data
             navigate(`/payment/${orderId}`, {
                 state: {
-                    orderData: order // Pass the existing order
+                    orderData: order 
                 }
             });
         } catch (error) {
