@@ -1,3 +1,4 @@
+import React from "react"
 const SellerTestimonials = () => {
     return (
         <div className='my-10 container mx-auto bg-gray-900 py-16 px-2'>

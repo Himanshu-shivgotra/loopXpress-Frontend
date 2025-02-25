@@ -31,7 +31,7 @@ const HowToRegister = () => {
     }
   ]
   return (
-    <div className="container mx-auto py-16 bg-black-2 px-2">
+    <div className="container mx-auto py-16 bg-gray-900 px-2">
       <div className="text-center">
         <h2 className="text-2xl lg:text-5xl font-bold text-orange-500 mb-10">
           How to Register a Seller Account

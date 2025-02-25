@@ -78,7 +78,7 @@ const Footer = () => {
 
                 {/* Copyright Section */}
                 <p className="text-center mt-10 text-gray-600">
-                    © {new Date().getFullYear()} Your Platform Name. All Rights Reserved.
+                    © {new Date().getFullYear()} Adrenal Go. All Rights Reserved.
                 </p>
             </div>
         </footer>
