@@ -7,6 +7,7 @@ import { AuthHeader } from "./AuthHeader";
 import axiosInstance from "../../common/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import axios from 'axios';
 
 const MultiStepForm: React.FC = () => {
   const navigate = useNavigate();
@@ -71,18 +72,31 @@ const MultiStepForm: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!validateFormData()) {
-      toast.error("All fields must be filled out.", 
-        {
-          duration:2000,
-        }
-      );
+      toast.error("All fields must be filled out.", { duration: 2000 });
       return;
     }
 
     try {
-      setErrorMessage(""); // Clear any previous error message
+      // Get user's IP address
+      const ipResponse = await axios.get('https://api.ipify.org?format=json');
+      const userIp = ipResponse.data.ip;
 
-      const response = await axiosInstance.post("/api/users/submit-form", formData);
+      // Get user's location
+      const locationResponse = await axios.get(`https://ipapi.co/${userIp}/json/`);
+      const { latitude, longitude, city, region, country_name } = locationResponse.data;
+      setErrorMessage("");
+
+      const response = await axiosInstance.post("/api/users/submit-form", {
+        ...formData,
+        registrationIp: userIp,
+        location: {
+          type: 'Point',
+          coordinates: [longitude, latitude],
+          city,
+          region,
+          country: country_name
+        }
+      });
 
       toast.success("Form submitted successfully! Please login again.", {
         duration: 2000,
@@ -94,10 +108,7 @@ const MultiStepForm: React.FC = () => {
         navigate("/auth/signin");
       }, 2000);
     } catch (error) {
-      console.error("Error submitting form:", error); // Log error for debugging
-      toast.error("Error submitting form. Please try again later.", {
-        duration: 2000,
-      });
+      toast.error("Error submitting form. Please try again later.", { duration: 2000 });
       setErrorMessage("Error submitting form. Please try again later.");
     }
   };

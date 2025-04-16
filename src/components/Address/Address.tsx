@@ -4,6 +4,7 @@ import { FaMapMarkerAlt } from 'react-icons/fa';
 interface AddressProps {
     initialAddress?: string;
     onSave: (address: string) => void;
+    onCancel?: () => void;
 }
 
 interface AddressFields {
@@ -21,13 +22,13 @@ const parseAddressString = (address: string): AddressFields => {
         line1: parts[0] || '',
         line2: parts[1] || '',
         city: parts[2] || '',
-        state: parts[3]?.split(' - ')[0] || '',
-        pincode: parts[3]?.split(' - ')[1] || '',
-        country: parts[4] || 'India'
+        state: parts[3] || '',
+        pincode: parts[4] || '',
+        country: parts[5] || 'India'
     };
 };
 
-const Address = ({ initialAddress = '', onSave }: AddressProps) => {
+const Address = ({ initialAddress = '', onSave, onCancel }: AddressProps) => {
     const [currentAddress, setCurrentAddress] = useState(initialAddress);
     const initialFields = currentAddress ? parseAddressString(currentAddress) : {
         line1: '',
@@ -106,12 +107,15 @@ const Address = ({ initialAddress = '', onSave }: AddressProps) => {
                             onChange={(e) => setAddressFields({...addressFields, country: e.target.value})}
                         />
                     </div>
-                    <button
-                        className="bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600"
-                        onClick={handleSave}
-                    >
-                        Save Address
-                    </button>
+                    <div className="flex gap-2 mt-4">
+                        <button
+                            className="bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600"
+                            onClick={handleSave}
+                        >
+                            Save Address
+                        </button>
+                        {onCancel && <button onClick={onCancel}>Cancel</button>}
+                    </div>
                 </div>
             ) : (
                 <div className="text-gray-700 dark:text-gray-300">

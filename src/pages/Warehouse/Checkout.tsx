@@ -121,10 +121,12 @@ const Checkout = () => {
 
             {/* Address Section */}
             {gstDetails?.address ? (
-                <Address 
-                    initialAddress={gstDetails.address}
-                    onSave={setManualAddress}
-                />
+                <div className="mb-6">
+                    <Address 
+                        initialAddress={gstDetails.address}
+                        onSave={setManualAddress}
+                    />
+                </div>
             ) : (
                 <Address onSave={setManualAddress} />
             )}
